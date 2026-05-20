@@ -1,0 +1,19 @@
+[project]
+name = "physical-ai-harness"
+version = "0.1.0"
+description = "Physical AI Harness - unified device orchestration for AI Agents"
+requires-python = ">=3.10"
+dependencies = [
+    "ai2thor>=5.0.0",
+    "mcp>=1.26.0",
+    "Pillow>=9.0.0",
+    "gradio>=4.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["harness*"]
