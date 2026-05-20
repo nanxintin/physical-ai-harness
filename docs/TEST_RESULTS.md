@@ -67,16 +67,47 @@
 
 ---
 
-## AI2-THOR 真实测试（待完成）
+## AI2-THOR 真实测试
 
-**状态**：AI2-THOR Unity 二进制下载中（769MB）
+**状态**：⚠️ 当前 WSL2 环境受限，无法完成
 
-待完成项目：
-- [ ] FloorPlan1（厨房）场景加载和设备发现
-- [ ] 真实设备 Toggle/Open 操作
-- [ ] 场景图像渲染验证
-- [ ] 性能基准：场景加载时间、操作延迟
-- [ ] 多场景切换（FloorPlan1 → FloorPlan201）
+### 环境问题诊断
+
+| 尝试方案 | 结果 | 原因 |
+|---------|------|------|
+| 默认启动 | Unity 进程 `<defunct>` | 缺少 libGL/Mesa/Vulkan 库 |
+| `platform=CloudRendering` | 超时 | 需要 NVIDIA CloudRendering 支持 |
+| `x_display="0"` | 超时 | WSLg X server 无 OpenGL 加速 |
+
+### 所需环境
+
+AI2-THOR Unity 二进制已成功下载（769MB → ~/.ai2thor/releases/，含 UnityPlayer.so 32MB），但启动需要：
+
+```bash
+# 方案 1：安装 Mesa OpenGL（需要 sudo）
+sudo apt-get install -y xvfb libvulkan1 libgl1-mesa-glx libglu1-mesa
+xvfb-run python tests/test_ai2thor_real.py
+
+# 方案 2：在有 GPU 的机器上运行
+# AI2-THOR 支持 Linux + NVIDIA GPU (推荐) 或 macOS
+
+# 方案 3：Docker with GPU
+docker run --gpus all -it python:3.10 bash
+pip install ai2thor && python -c "from ai2thor.controller import Controller; ..."
+```
+
+### 验证脚本就绪
+
+`tests/test_ai2thor_real.py` 已编写完成，覆盖：
+- [x] 场景加载 + 性能计时
+- [x] 设备发现 + 分类统计
+- [x] Toggle/Open 操作（含安全检查）
+- [x] 图像捕获 + PNG 验证
+- [x] 多设备编排场景
+- [x] 事件追踪
+- [x] 安全沙箱实战验证
+
+在有图形环境的机器上执行即可：`python tests/test_ai2thor_real.py`
 
 ---
 
