@@ -22,9 +22,12 @@ from harness.safety import SafetySandbox
 event_bus = EventBus()
 sandbox = SafetySandbox(max_allowed=SafetyLevel.HIGH)
 
-USE_MOCK = os.environ.get("HARNESS_MOCK", "").lower() in ("1", "true", "yes")
+_BACKEND = os.environ.get("HARNESS_BACKEND", "mock").lower()
 
-if USE_MOCK:
+if _BACKEND == "virtualhome":
+    from harness.adapters.virtualhome_adapter import VirtualHomeAdapter
+    adapter = VirtualHomeAdapter(event_bus=event_bus)
+elif _BACKEND in ("mock", "1", "true", "yes") or os.environ.get("HARNESS_MOCK", "").lower() in ("1", "true", "yes"):
     from harness.adapters.mock_adapter import MockAdapter
     adapter = MockAdapter(event_bus=event_bus)
 else:

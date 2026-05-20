@@ -1,0 +1,25 @@
+{
+  "status": "success",
+  "engine": "virtualhome_evolving_graph",
+  "gpu_required": false,
+  "scene": "kitchen",
+  "devices_found": 13,
+  "operations_tested": 6,
+  "operations_passed": 6,
+  "events_recorded": 6,
+  "device_types": [
+    "fridge",
+    "microwave",
+    "stove",
+    "lightswitch",
+    "coffeepot",
+    "plate",
+    "apple",
+    "mug",
+    "sink",
+    "dishwasher",
+    "cabinet",
+    "tv",
+    "toaster"
+  ]
+}
