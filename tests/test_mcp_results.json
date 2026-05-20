@@ -1,0 +1,7 @@
+{
+  "test_run": "mcp_server_tools",
+  "passed": 12,
+  "failed": 0,
+  "total": 12,
+  "mock_mode": true
+}

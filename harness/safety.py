@@ -23,7 +23,8 @@ class SafetySandbox:
         if property_name:
             for cap in device.capabilities:
                 if cap.name == property_name:
-                    level = cap.safety_level
+                    if not (cap.safety_level <= level):
+                        level = cap.safety_level
                     break
 
         if level == SafetyLevel.CRITICAL:

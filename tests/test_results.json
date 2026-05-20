@@ -1,0 +1,188 @@
+{
+  "test_run": "mock_adapter_full_pipeline",
+  "total": 36,
+  "passed": 36,
+  "failed": 0,
+  "details": [
+    {
+      "name": "scene loads",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "devices discovered",
+      "passed": true,
+      "detail": "got 10"
+    },
+    {
+      "name": "device types present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "list_devices returns CDDs",
+      "passed": true,
+      "detail": "got 10"
+    },
+    {
+      "name": "has FloorLamp",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has Fridge",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has Safe",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "get lamp state",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "TV is initially on",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "nonexistent device raises",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "turn on lamp",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "turn off TV",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "open fridge",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "close fridge",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "invalid property raises",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "LOW device allowed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "MEDIUM device allowed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "HIGH device allowed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "CRITICAL device blocked",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "CRITICAL requires confirmation",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "HIGH blocked by strict sandbox",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "event emitted on control",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "event has device_id",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "event has value",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "history recorded",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "image is base64 string",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "image decodes to bytes",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "image is valid PNG",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "image saved to test_output_mock_scene.png",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "all 3 devices controlled",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "all final states correct",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has device_id",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has device_type",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has safety_class",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has capabilities list",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "capability has name",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

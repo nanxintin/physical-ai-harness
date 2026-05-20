@@ -13,14 +13,23 @@ from typing import Any, Optional
 
 from mcp.server.fastmcp import FastMCP
 
-from harness.adapters.ai2thor_adapter import AI2ThorAdapter
+import os
+
 from harness.events import EventBus
 from harness.models import SafetyLevel
 from harness.safety import SafetySandbox
 
 event_bus = EventBus()
-adapter = AI2ThorAdapter(event_bus=event_bus)
 sandbox = SafetySandbox(max_allowed=SafetyLevel.HIGH)
+
+USE_MOCK = os.environ.get("HARNESS_MOCK", "").lower() in ("1", "true", "yes")
+
+if USE_MOCK:
+    from harness.adapters.mock_adapter import MockAdapter
+    adapter = MockAdapter(event_bus=event_bus)
+else:
+    from harness.adapters.ai2thor_adapter import AI2ThorAdapter
+    adapter = AI2ThorAdapter(event_bus=event_bus)
 
 mcp = FastMCP(
     "harness",

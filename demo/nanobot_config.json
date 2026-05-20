@@ -17,6 +17,7 @@
         "type": "stdio",
         "command": "python",
         "args": ["-m", "harness.mcp_server"],
+        "env": {"HARNESS_MOCK": "1"},
         "tool_timeout": 120,
         "enabled_tools": ["*"]
       }
