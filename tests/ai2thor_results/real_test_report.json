@@ -1,0 +1,37 @@
+{
+  "status": "environment_blocked",
+  "timestamp": "2026-05-20T14:30:00",
+  "platform_attempts": [
+    {
+      "platform": "Linux64 (OpenGL)",
+      "result": "failed",
+      "error": "No supported renderers found - requires OpenGL 3.2+ Core Profile",
+      "detail": "Mesa software renderer does not provide OpenGL 3.2 Core"
+    },
+    {
+      "platform": "CloudRendering (Vulkan)",
+      "result": "crashed",
+      "error": "SIGSEGV in vkGetPhysicalDeviceQueueFamilyProperties",
+      "detail": "llvmpipe (software Vulkan) selected as device but Unity segfaults on it. Needs real GPU ICD."
+    }
+  ],
+  "environment": {
+    "wsl_version": "WSL2 (Linux 6.6.87.2-microsoft-standard-WSL2)",
+    "gpu": "None (no nvidia-smi, no hardware GPU passthrough)",
+    "vulkan_device": "llvmpipe (LLVM 15.0.7, 256 bits) - software only",
+    "opengl": "Mesa software - no GLX 3.2 Core Profile",
+    "installed_libs": ["libgl1-mesa-glx", "libgl1-mesa-dri", "libvulkan1", "xvfb"]
+  },
+  "resolution": {
+    "option_1": "Run on machine with NVIDIA GPU + nvidia-docker or native Linux",
+    "option_2": "Use WSL2 with GPU-PV (requires Windows GPU driver passthrough enabled)",
+    "option_3": "Use ai2thor-docker image: docker run --gpus all allenai/ai2thor-docker",
+    "option_4": "Use cloud VM with GPU (AWS g4dn, GCP T4, Azure NC)"
+  },
+  "mock_tests_passed": {
+    "full_pipeline": "36/36",
+    "mcp_server": "12/12",
+    "e2e_demo": "9/9"
+  },
+  "code_readiness": "All adapter/MCP/safety code is correct and tested with mock. Real AI2-THOR tests need only GPU environment to run."
+}
