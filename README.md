@@ -161,7 +161,7 @@ python demo/run_demo.py
 │  Layer 1: Adapter Layer (11 pluggable backends)              │
 │  ┌────────────┬────────────┬──────────┬───────────────────┐  │
 │  │ AI2-THOR   │ MuJoCo     │ PyBullet │ Gazebo Harmonic   │  │
-│  │ (IoT)      │ (Go1 quad) │ (Panda)  │ (TurtleBot3)     │  │
+│  │ (IoT)      │ (Go1 quad) │ (Panda)  │ (TurtleBot3)      │  │
 │  ├────────────┼────────────┼──────────┼───────────────────┤  │
 │  │ Webots     │ SUMO       │ Scenic   │ VirtualHome       │  │
 │  │ (e-puck)   │ (traffic)  │ (AV)     │ (graph)           │  │
@@ -194,15 +194,6 @@ python demo/run_demo.py
 - High-level locomotion: stand, sit, walk, turn, trot, stop
 - Open-loop sinusoidal gait controller
 - EGL headless rendering for CI/CD
-
-### 🛡️ Safety Sandbox
-
-| Level | Devices | Policy |
-|-------|---------|--------|
-| 🟢 LOW | Lamps, TVs, laptops | Execute freely |
-| 🟡 MEDIUM | Fridge, microwave, e-stop | Parameter validation |
-| 🔴 HIGH | Stove, faucet, robot joints | Warn before execution |
-| ⛔ CRITICAL | Safe, fast gaits (trot) | Block, require human confirmation |
 
 ### 🚗 Autonomous Driving (SUMO + Scenic)
 
@@ -251,6 +242,15 @@ python demo/run_demo.py
 - Async event bus with publish/subscribe
 - State change tracking with full history
 - Event-triggered multi-device orchestration
+
+### 🛡️ Safety Sandbox
+
+| Level | Devices | Policy |
+|-------|---------|--------|
+| 🟢 LOW | Lamps, TVs, laptops | Execute freely |
+| 🟡 MEDIUM | Fridge, microwave, e-stop | Parameter validation |
+| 🔴 HIGH | Stove, faucet, robot joints | Warn before execution |
+| ⛔ CRITICAL | Safe, fast gaits (trot) | Block, require human confirmation |
 
 ---
 
@@ -422,11 +422,11 @@ physical-ai-harness/
 Physical AI Harness is not just a simulation framework — it's a **data engine** for post-training LLMs on physical world interactions. The closed-loop pipeline:
 
 ```
-┌──────────────┐     ┌──────────────────┐     ┌───────────────┐     ┌──────────────┐
+┌──────────────┐      ┌──────────────────┐      ┌───────────────┐      ┌──────────────┐
 │  Qwen3-8B    │────▶│  Harness MCP     │────▶│  Trajectory   │────▶│  VERL GRPO   │
-│  (vLLM)      │◀────│  (MuJoCo/SUMO)   │     │  Collector    │     │  Training    │
-└──────────────┘     └──────────────────┘     └───────────────┘     └──────────────┘
-       ▲                                                                     │
+│  (vLLM)      │◀────│  (MuJoCo/SUMO)   │      │  Collector    │      │  Training    │
+└──────────────┘      └──────────────────┘      └───────────────┘      └──────────────┘
+       ▲                                                                      │
        └─────────────────── Fine-tuned Model ◀───────────────────────────────┘
 ```
 
