@@ -9,8 +9,8 @@
   <a href="#-quick-start">Quick Start</a> •
   <a href="#-architecture">Architecture</a> •
   <a href="#-features">Features</a> •
-  <a href="#-mcp-tools">MCP Tools</a> •
   <a href="#-adapters">Adapters</a> •
+  <a href="#-training-pipeline-simulate--train--deploy">Training</a> •
   <a href="#-roadmap">Roadmap</a>
 </p>
 
@@ -19,6 +19,8 @@
   <img src="https://img.shields.io/badge/MCP-native-green?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHRleHQgeT0iMTgiIGZvbnQtc2l6ZT0iMTYiPuKalDwvdGV4dD48L3N2Zz4=" alt="MCP"/>
   <img src="https://img.shields.io/badge/license-Apache_2.0-orange" alt="License"/>
   <img src="https://img.shields.io/badge/simulators-8_backends-purple" alt="Simulation"/>
+  <img src="https://img.shields.io/badge/training-VERL_GRPO-red?logo=pytorch&logoColor=white" alt="Training"/>
+  <img src="https://img.shields.io/badge/tests-238_passed-brightgreen" alt="Tests"/>
 </p>
 
 ---
@@ -322,7 +324,7 @@ Every device declares its capabilities through a **Capability Description Docume
 
 ```
 physical-ai-harness/
-├── harness/
+├── harness/                       # Core framework
 │   ├── models.py                  # CDD, DeviceState, SafetyLevel
 │   ├── adapter.py                 # Abstract Adapter interface (6 methods)
 │   ├── safety.py                  # Safety Sandbox (4-level)
@@ -339,10 +341,26 @@ physical-ai-harness/
 │       ├── gazebo/                   # Gazebo Harmonic (TurtleBot3)
 │       ├── webots/                   # Webots R2025a (e-puck)
 │       └── scenic/                   # Scenic (AV scenario generation)
+├── training/                      # Data generation + post-training
+│   ├── rollout.py                 # LLM ↔ Harness interaction engine
+│   ├── trajectory.py             # Trajectory data model
+│   ├── tasks.py                  # 11 pre-defined task templates
+│   ├── reward.py                 # VERL-compatible reward functions
+│   ├── export_parquet.py         # Trajectories → VERL Parquet
+│   ├── configs/
+│   │   ├── rollout_config.yaml   # Rollout settings
+│   │   └── verl_grpo.yaml        # VERL GRPO training config
+│   └── scripts/
+│       ├── run_rollout.py        # CLI: generate trajectories
+│       ├── run_export.py         # CLI: export to Parquet
+│       └── run_verl_train.py     # CLI: launch VERL training
+├── data/                          # Generated data (gitignored)
+│   ├── trajectories/             # Raw trajectory JSONs
+│   └── parquet/                  # VERL-ready train/eval splits
 ├── demo/
-│   ├── run_demo.py                # Gradio WebUI
-│   ├── system_prompt.md           # Agent prompt (IoT)
-│   └── system_prompt_robot.md     # Agent prompt (robot)
+│   ├── run_demo.py               # Gradio WebUI
+│   ├── system_prompt.md          # Agent prompt (IoT)
+│   └── system_prompt_robot.md    # Agent prompt (robot)
 ├── tests/                         # 238 tests total
 │   ├── test_full_pipeline.py      # IoT (36 tests)
 │   ├── test_mujoco_pipeline.py    # MuJoCo robot (49 tests)

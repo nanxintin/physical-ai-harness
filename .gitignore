@@ -10,3 +10,9 @@ venv/
 .env
 *.so
 .DS_Store
+
+# Generated training data
+data/trajectories/*.json
+data/parquet/*.parquet
+!data/trajectories/.gitkeep
+!data/parquet/.gitkeep
