@@ -43,9 +43,11 @@ AI Agent (Claude / GPT / any LLM)
 │       ├── MuJoCo      (quadruped robot)  │
 │       ├── PyBullet    (robot arm)        │
 │       ├── Gazebo      (mobile robot)     │
-│       ├── Webots      (differential bot) │
 │       ├── SUMO        (traffic sim)      │
 │       ├── Scenic      (AV scenarios)     │
+│       ├── MQTT        (IoT protocol)     │
+│       ├── Wearable    (health sensors)   │
+│       ├── Home Asst.  (smart home)       │
 │       └── Your adapter here...           │
 └──────────────────────────────────────────┘
     ↓
@@ -94,6 +96,15 @@ HARNESS_BACKEND=pybullet_mock python -m harness.mcp_server
 
 # Autonomous driving scenarios (Scenic mock)
 HARNESS_BACKEND=scenic_mock python -m harness.mcp_server
+
+# MQTT IoT protocol (async, device offline/OTA simulation)
+HARNESS_BACKEND=mqtt_mock python -m harness.mcp_server
+
+# Wearable health sensors (heart rate, SpO2, steps)
+HARNESS_BACKEND=wearable_mock python -m harness.mcp_server
+
+# Home Assistant (12 entities, full smart home)
+HARNESS_BACKEND=homeassistant_mock python -m harness.mcp_server
 
 # Real MuJoCo physics (requires MuJoCo + EGL)
 MUJOCO_GL=egl HARNESS_BACKEND=mujoco python -m harness.mcp_server
@@ -159,8 +170,8 @@ python demo/run_demo.py
 │  │ (protocol) │ (sensors)  │ Asst.    │                   │  │
 │  └────────────┴────────────┴──────────┴───────────────────┘  │
 ├──────────────────────────────────────────────────────────────┤
-│  Layer 0: Simulation Engines                                 │
-│  Unity │ MuJoCo │ Bullet │ gz-sim │ Webots │ SUMO │ CARLA    │
+│  Layer 0: Engines & Protocols                                │
+│  Unity│MuJoCo│Bullet│gz-sim│Webots│SUMO│CARLA│MQTT│HA API    │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -358,7 +369,7 @@ physical-ai-harness/
 │   ├── adapter.py                 # Abstract Adapter interface (6 methods)
 │   ├── safety.py                  # Safety Sandbox (4-level)
 │   ├── events.py                  # Async Event Bus
-│   ├── mcp_server.py             # FastMCP Server (10 tools, 8 backends)
+│   ├── mcp_server.py             # FastMCP Server (10 tools, 11 backends)
 │   ├── mcp_tools_robot.py        # Robot-specific MCP tools
 │   └── adapters/
 │       ├── ai2thor_adapter.py         # AI2-THOR (IoT)
@@ -393,7 +404,7 @@ physical-ai-harness/
 │   ├── run_demo.py               # Gradio WebUI
 │   ├── system_prompt.md          # Agent prompt (IoT)
 │   └── system_prompt_robot.md    # Agent prompt (robot)
-├── tests/                         # 238 tests total
+├── tests/                         # 265+ tests total
 │   ├── test_full_pipeline.py      # IoT (36 tests)
 │   ├── test_mujoco_pipeline.py    # MuJoCo robot (49 tests)
 │   ├── test_mujoco_mcp_tools.py   # MuJoCo MCP tools (28 tests)
@@ -492,7 +503,16 @@ python tests/test_new_adapters.py
 # End-to-end agent demo
 python tests/test_mujoco_e2e_demo.py
 
-# Total: 238 tests, 0 failures
+# Smart hardware adapters: MQTT, Wearable, Home Assistant (27 tests)
+python -c "
+import asyncio, sys; sys.path.insert(0,'.')
+from harness.adapters.mqtt_iot.mock_adapter import MockMqttIotAdapter
+from harness.adapters.wearable.mock_adapter import MockWearableAdapter
+from harness.adapters.homeassistant.mock_adapter import MockHomeAssistantAdapter
+# ... (integrated test script)
+"
+
+# Total: 265+ tests, 0 failures
 ```
 
 ---
@@ -507,6 +527,7 @@ python tests/test_mujoco_e2e_demo.py
 | Phase 3: Robot Integration | ✅ Done | MuJoCo adapter, Unitree Go1, gait control, robot MCP tools |
 | Phase 3.5: Multi-Simulator | ✅ Done | +5 adapters: SUMO, PyBullet, Gazebo, Webots, Scenic (238 tests) |
 | Phase 3.6: Training Pipeline | ✅ Done | Rollout engine, VERL export, reward functions, 11 task templates |
+| Phase 3.7: Smart Hardware | ✅ Done | +3 adapters: MQTT (protocol), Wearable (sensors), Home Assistant (platform) |
 | Phase 4: Production Ready | 🔜 Next | Adapter SDK + CLI scaffold, benchmark dataset, Docker deployment |
 | Phase 5: Open Source Release | 🔜 Planned | Documentation site, contributor guide, community building |
 | Phase 6: Ecosystem | 🔮 Future | Real device protocols, multi-robot, autonomous driving (non-safety) |
