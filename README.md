@@ -18,9 +18,9 @@
   <img src="https://img.shields.io/badge/python-3.10+-blue?logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/MCP-native-green?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHRleHQgeT0iMTgiIGZvbnQtc2l6ZT0iMTYiPuKalDwvdGV4dD48L3N2Zz4=" alt="MCP"/>
   <img src="https://img.shields.io/badge/license-Apache_2.0-orange" alt="License"/>
-  <img src="https://img.shields.io/badge/simulators-8_backends-purple" alt="Simulation"/>
+  <img src="https://img.shields.io/badge/simulators-11_backends-purple" alt="Simulation"/>
   <img src="https://img.shields.io/badge/training-VERL_GRPO-red?logo=pytorch&logoColor=white" alt="Training"/>
-  <img src="https://img.shields.io/badge/tests-238_passed-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/tests-265_passed-brightgreen" alt="Tests"/>
 </p>
 
 ---
@@ -38,7 +38,7 @@ AI Agent (Claude / GPT / any LLM)
 │  Physical AI Harness                     │
 │  ├── Safety Sandbox (4-level)            │
 │  ├── Event Bus (async pub/sub)           │
-│  └── Adapter Layer (8 backends)          │
+│  └── Adapter Layer (11 backends)         │
 │       ├── AI2-THOR    (IoT devices)      │
 │       ├── MuJoCo      (quadruped robot)  │
 │       ├── PyBullet    (robot arm)        │
@@ -147,13 +147,16 @@ python demo/run_demo.py
 │  │ (FastMCP)  │ Sandbox      │ (async pub/sub)            │  │
 │  └────────────┴──────────────┴────────────────────────────┘  │
 ├──────────────────────────────────────────────────────────────┤
-│  Layer 1: Adapter Layer (8 pluggable backends)               │
+│  Layer 1: Adapter Layer (11 pluggable backends)              │
 │  ┌────────────┬────────────┬──────────┬───────────────────┐  │
 │  │ AI2-THOR   │ MuJoCo     │ PyBullet │ Gazebo Harmonic   │  │
-│  │ (IoT)      │ (Go1 quad) │ (Panda)  │ (TurtleBot3)      │  │
+│  │ (IoT)      │ (Go1 quad) │ (Panda)  │ (TurtleBot3)     │  │
 │  ├────────────┼────────────┼──────────┼───────────────────┤  │
 │  │ Webots     │ SUMO       │ Scenic   │ VirtualHome       │  │
 │  │ (e-puck)   │ (traffic)  │ (AV)     │ (graph)           │  │
+│  ├────────────┼────────────┼──────────┼───────────────────┤  │
+│  │ MQTT IoT   │ Wearable   │ Home     │                   │  │
+│  │ (protocol) │ (sensors)  │ Asst.    │                   │  │
 │  └────────────┴────────────┴──────────┴───────────────────┘  │
 ├──────────────────────────────────────────────────────────────┤
 │  Layer 0: Simulation Engines                                 │
@@ -209,6 +212,29 @@ python demo/run_demo.py
 - **Webots R2025a**: e-puck with 8 distance sensors, differential drive
 - Navigation, obstacle avoidance, wall following
 
+### 📡 MQTT IoT Protocol Simulation
+
+- Async publish/subscribe messaging (not sync RPC)
+- Device offline simulation (5% random disconnection)
+- Message loss (2% drop rate), network latency (50-200ms)
+- OTA firmware update states (device uncontrollable during update)
+- Battery drain for battery-powered devices
+- Event injection: smoke alarm, motion detection, temperature anomaly
+
+### ⌚ Wearable Health Sensors
+
+- Continuous time-series data: heart rate, SpO2, steps, calories, stress, skin temp
+- Activity profiles: resting, walking, running, sleeping, stressed
+- Anomaly injection: tachycardia, hypoxia, fall detection, irregular rhythm
+- LLM learns to reason from sensor streams ("HR sustained >150 → suggest rest")
+
+### 🏠 Home Assistant Integration
+
+- 12 entity types: lights, climate, locks, covers, media players, sensors, vacuum, fans
+- Maps 1:1 to HA Entity model (entity_id → device_id, services → actions)
+- Device unavailable states, area/room grouping
+- Gateway to 1000+ real device integrations via HA ecosystem
+
 ### 📡 Event-Driven Architecture
 
 - Async event bus with publish/subscribe
@@ -256,6 +282,9 @@ python demo/run_demo.py
 | `gazebo` / `gazebo_mock` | `HARNESS_BACKEND=gazebo` | Mobile Robot | Gazebo Harmonic (TurtleBot3) |
 | `webots` / `webots_mock` | `HARNESS_BACKEND=webots` | Mobile Robot | Webots R2025a (e-puck) |
 | `scenic` / `scenic_mock` | `HARNESS_BACKEND=scenic` | AV Scenarios | Scenic (CARLA-backed) |
+| `mqtt` / `mqtt_mock` | `HARNESS_BACKEND=mqtt` | IoT Protocol | MQTT broker (async messaging) |
+| `wearable` / `wearable_mock` | `HARNESS_BACKEND=wearable` | Health Sensors | Wearable band (time-series) |
+| `homeassistant` / `homeassistant_mock` | `HARNESS_BACKEND=homeassistant` | Smart Home Platform | Home Assistant (12 entities) |
 
 > **Tip**: Every real backend has a `_mock` variant that runs without the simulator binary — perfect for development and CI.
 
@@ -340,7 +369,10 @@ physical-ai-harness/
 │       ├── pybullet_arm/             # PyBullet (Franka Panda arm)
 │       ├── gazebo/                   # Gazebo Harmonic (TurtleBot3)
 │       ├── webots/                   # Webots R2025a (e-puck)
-│       └── scenic/                   # Scenic (AV scenario generation)
+│       ├── scenic/                   # Scenic (AV scenario generation)
+│       ├── mqtt_iot/                 # MQTT protocol (async IoT)
+│       ├── wearable/                 # Wearable sensor stream
+│       └── homeassistant/            # Home Assistant (12 entities)
 ├── training/                      # Data generation + post-training
 │   ├── rollout.py                 # LLM ↔ Harness interaction engine
 │   ├── trajectory.py             # Trajectory data model

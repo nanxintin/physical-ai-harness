@@ -63,6 +63,24 @@ elif _BACKEND == "scenic":
 elif _BACKEND == "scenic_mock":
     from harness.adapters.scenic.mock_adapter import MockScenicAdapter
     adapter = MockScenicAdapter(event_bus=event_bus)
+elif _BACKEND == "mqtt":
+    from harness.adapters.mqtt_iot.adapter import MqttIotAdapter
+    adapter = MqttIotAdapter(event_bus=event_bus)
+elif _BACKEND == "mqtt_mock":
+    from harness.adapters.mqtt_iot.mock_adapter import MockMqttIotAdapter
+    adapter = MockMqttIotAdapter(event_bus=event_bus)
+elif _BACKEND == "wearable":
+    from harness.adapters.wearable.adapter import WearableAdapter
+    adapter = WearableAdapter(event_bus=event_bus)
+elif _BACKEND == "wearable_mock":
+    from harness.adapters.wearable.mock_adapter import MockWearableAdapter
+    adapter = MockWearableAdapter(event_bus=event_bus)
+elif _BACKEND == "homeassistant":
+    from harness.adapters.homeassistant.adapter import HomeAssistantAdapter
+    adapter = HomeAssistantAdapter(event_bus=event_bus)
+elif _BACKEND == "homeassistant_mock":
+    from harness.adapters.homeassistant.mock_adapter import MockHomeAssistantAdapter
+    adapter = MockHomeAssistantAdapter(event_bus=event_bus)
 elif _BACKEND in ("mock", "1", "true", "yes") or os.environ.get("HARNESS_MOCK", "").lower() in ("1", "true", "yes"):
     from harness.adapters.mock_adapter import MockAdapter
     adapter = MockAdapter(event_bus=event_bus)
