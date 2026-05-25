@@ -32,15 +32,20 @@ User (natural language)
     ↓
 AI Agent (Claude / GPT / any LLM)
     ↓ MCP Protocol
-┌─────────────────────────────────────┐
-│  Physical AI Harness                │
-│  ├── Safety Sandbox (4-level)       │
-│  ├── Event Bus (async pub/sub)      │
-│  └── Adapter Layer (pluggable)      │
-│       ├── AI2-THOR (IoT devices)    │
-│       ├── MuJoCo (quadruped robot)  │
-│       └── Your adapter here...      │
-└─────────────────────────────────────┘
+┌──────────────────────────────────────────┐
+│  Physical AI Harness                     │
+│  ├── Safety Sandbox (4-level)            │
+│  ├── Event Bus (async pub/sub)           │
+│  └── Adapter Layer (8 backends)          │
+│       ├── AI2-THOR    (IoT devices)      │
+│       ├── MuJoCo      (quadruped robot)  │
+│       ├── PyBullet    (robot arm)        │
+│       ├── Gazebo      (mobile robot)     │
+│       ├── Webots      (differential bot) │
+│       ├── SUMO        (traffic sim)      │
+│       ├── Scenic      (AV scenarios)     │
+│       └── Your adapter here...           │
+└──────────────────────────────────────────┘
     ↓
 Physical / Simulated Devices
 ```
@@ -73,13 +78,22 @@ pip install -e ".[mujoco]"
 ### Option 1: MCP Server (recommended — integrates with any agent)
 
 ```bash
-# IoT simulation (mock mode, no GPU needed)
+# IoT smart home (mock, no GPU)
 HARNESS_BACKEND=mock python -m harness.mcp_server
 
-# Robot simulation (mock mode)
+# Quadruped robot (MuJoCo mock)
 HARNESS_BACKEND=mujoco_mock python -m harness.mcp_server
 
-# Real MuJoCo physics
+# Traffic simulation (SUMO mock)
+HARNESS_BACKEND=sumo_mock python -m harness.mcp_server
+
+# Robot arm (PyBullet mock)
+HARNESS_BACKEND=pybullet_mock python -m harness.mcp_server
+
+# Autonomous driving scenarios (Scenic mock)
+HARNESS_BACKEND=scenic_mock python -m harness.mcp_server
+
+# Real MuJoCo physics (requires MuJoCo + EGL)
 MUJOCO_GL=egl HARNESS_BACKEND=mujoco python -m harness.mcp_server
 ```
 
@@ -121,25 +135,28 @@ python demo/run_demo.py
 ## 🏗️ Architecture
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│  Layer 3: AI Agent (Claude / GPT / any LLM)              │
-│           ↕ MCP Protocol (stdio / SSE)                   │
-├──────────────────────────────────────────────────────────┤
-│  Layer 2: Harness Core                                   │
-│  ┌────────────┬──────────────┬────────────────────────┐  │
-│  │ MCP Server │ Safety       │ Event Bus              │  │
-│  │ (FastMCP)  │ Sandbox      │ (async pub/sub)        │  │
-│  └────────────┴──────────────┴────────────────────────┘  │
-├──────────────────────────────────────────────────────────┤
-│  Layer 1: Adapter Layer (pluggable backends)             │
-│  ┌──────────────┬────────────────┬────────────────────┐  │
-│  │ AI2-THOR     │ MuJoCo Go1     │ VirtualHome        │  │
-│  │ (IoT sim)    │ (robot sim)    │ (graph sim)        │  │
-│  └──────────────┴────────────────┴────────────────────┘  │
-├──────────────────────────────────────────────────────────┤
-│  Layer 0: Simulation Backends                            │
-│  Unity (AI2-THOR) │ MuJoCo (physics) │ Graph Engine     │
-└──────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│  Layer 3: AI Agent (Claude / GPT / any LLM)                  │
+│           ↕ MCP Protocol (stdio / SSE)                       │
+├──────────────────────────────────────────────────────────────┤
+│  Layer 2: Harness Core                                       │
+│  ┌────────────┬──────────────┬────────────────────────────┐  │
+│  │ MCP Server │ Safety       │ Event Bus                  │  │
+│  │ (FastMCP)  │ Sandbox      │ (async pub/sub)            │  │
+│  └────────────┴──────────────┴────────────────────────────┘  │
+├──────────────────────────────────────────────────────────────┤
+│  Layer 1: Adapter Layer (8 pluggable backends)               │
+│  ┌────────────┬────────────┬──────────┬───────────────────┐  │
+│  │ AI2-THOR   │ MuJoCo     │ PyBullet │ Gazebo Harmonic   │  │
+│  │ (IoT)      │ (Go1 quad) │ (Panda)  │ (TurtleBot3)     │  │
+│  ├────────────┼────────────┼──────────┼───────────────────┤  │
+│  │ Webots     │ SUMO       │ Scenic   │ VirtualHome       │  │
+│  │ (e-puck)   │ (traffic)  │ (AV)     │ (graph)          │  │
+│  └────────────┴────────────┴──────────┴───────────────────┘  │
+├──────────────────────────────────────────────────────────────┤
+│  Layer 0: Simulation Engines                                 │
+│  Unity │ MuJoCo │ Bullet │ gz-sim │ Webots │ SUMO │ CARLA  │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -170,6 +187,25 @@ python demo/run_demo.py
 | 🟡 MEDIUM | Fridge, microwave, e-stop | Parameter validation |
 | 🔴 HIGH | Stove, faucet, robot joints | Warn before execution |
 | ⛔ CRITICAL | Safe, fast gaits (trot) | Block, require human confirmation |
+
+### 🚗 Autonomous Driving (SUMO + Scenic)
+
+- **SUMO**: Multi-vehicle traffic simulation via TraCI — vehicles, traffic lights, pedestrians
+- **Scenic**: Probabilistic scenario generation with CARLA backend — intersection crossing, highway merge, pedestrian avoidance
+- Safety: vehicles=HIGH, traffic lights=CRITICAL, driving=CRITICAL
+
+### 🦾 Robot Arms (PyBullet + Franka Panda)
+
+- 7-DOF robot arm with parallel gripper
+- Joint position/velocity control with range validation
+- Actions: home, pick, place, open/close gripper
+- Simplified forward kinematics for end-effector tracking
+
+### 🚙 Mobile Robots (Gazebo + Webots)
+
+- **Gazebo Harmonic**: TurtleBot3 with LiDAR (360-ray), IMU, odometry, camera
+- **Webots R2025a**: e-puck with 8 distance sensors, differential drive
+- Navigation, obstacle avoidance, wall following
 
 ### 📡 Event-Driven Architecture
 
@@ -288,29 +324,30 @@ Every device declares its capabilities through a **Capability Description Docume
 physical-ai-harness/
 ├── harness/
 │   ├── models.py                  # CDD, DeviceState, SafetyLevel
-│   ├── adapter.py                 # Abstract Adapter interface
-│   ├── safety.py                  # Safety Sandbox
+│   ├── adapter.py                 # Abstract Adapter interface (6 methods)
+│   ├── safety.py                  # Safety Sandbox (4-level)
 │   ├── events.py                  # Async Event Bus
-│   ├── mcp_server.py             # FastMCP Server (10 tools)
+│   ├── mcp_server.py             # FastMCP Server (10 tools, 8 backends)
 │   ├── mcp_tools_robot.py        # Robot-specific MCP tools
 │   └── adapters/
-│       ├── ai2thor_adapter.py         # AI2-THOR (IoT simulation)
-│       ├── virtualhome_adapter.py     # VirtualHome (graph sim)
-│       ├── mock_adapter.py            # IoT mock (testing)
-│       └── mujoco_go1/               # MuJoCo quadruped robot
-│           ├── adapter.py             # Real physics adapter
-│           ├── mock_adapter.py        # Robot mock (testing)
-│           ├── robot_config.py        # Joint/pose/action config
-│           ├── locomotion.py          # Gait controller
-│           └── models/unitree_go1/    # MJCF model files
+│       ├── ai2thor_adapter.py         # AI2-THOR (IoT)
+│       ├── virtualhome_adapter.py     # VirtualHome (graph)
+│       ├── mock_adapter.py            # IoT mock
+│       ├── mujoco_go1/               # MuJoCo (Unitree Go1 quadruped)
+│       ├── sumo/                     # SUMO (traffic simulation)
+│       ├── pybullet_arm/             # PyBullet (Franka Panda arm)
+│       ├── gazebo/                   # Gazebo Harmonic (TurtleBot3)
+│       ├── webots/                   # Webots R2025a (e-puck)
+│       └── scenic/                   # Scenic (AV scenario generation)
 ├── demo/
 │   ├── run_demo.py                # Gradio WebUI
 │   ├── system_prompt.md           # Agent prompt (IoT)
 │   └── system_prompt_robot.md     # Agent prompt (robot)
-├── tests/
-│   ├── test_full_pipeline.py      # IoT adapter tests (36 tests)
-│   ├── test_mujoco_pipeline.py    # Robot adapter tests (49 tests)
-│   ├── test_mujoco_mcp_tools.py   # Robot MCP tools (28 tests)
+├── tests/                         # 238 tests total
+│   ├── test_full_pipeline.py      # IoT (36 tests)
+│   ├── test_mujoco_pipeline.py    # MuJoCo robot (49 tests)
+│   ├── test_mujoco_mcp_tools.py   # MuJoCo MCP tools (28 tests)
+│   ├── test_new_adapters.py       # SUMO+PyBullet+Gazebo+Webots+Scenic (125 tests)
 │   └── test_mujoco_e2e_demo.py    # End-to-end agent simulation
 ├── pyproject.toml
 ├── README.md
@@ -350,6 +387,7 @@ python tests/test_mujoco_e2e_demo.py
 | Phase 1: E2E Validation | ✅ Done | Mock adapter, full test suite, Gradio demo |
 | Phase 2: Multi-device | ✅ Done | VirtualHome adapter, cross-backend orchestration |
 | Phase 3: Robot Integration | ✅ Done | MuJoCo adapter, Unitree Go1, gait control, robot MCP tools |
+| Phase 3.5: Multi-Simulator | ✅ Done | +5 adapters: SUMO, PyBullet, Gazebo, Webots, Scenic (238 tests) |
 | Phase 4: Production Ready | 🔜 Next | Adapter SDK + CLI scaffold, benchmark dataset, Docker deployment |
 | Phase 5: Open Source Release | 🔜 Planned | Documentation site, contributor guide, community building |
 | Phase 6: Ecosystem | 🔮 Future | Real device protocols, multi-robot, autonomous driving (non-safety) |
