@@ -356,6 +356,74 @@ physical-ai-harness/
 
 ---
 
+## 🧠 Training Pipeline (Simulate → Train → Deploy)
+
+Physical AI Harness is not just a simulation framework — it's a **data engine** for post-training LLMs on physical world interactions. The closed-loop pipeline:
+
+```
+┌──────────────┐     ┌──────────────────┐     ┌───────────────┐     ┌──────────────┐
+│  Qwen3-8B    │────▶│  Harness MCP     │────▶│  Trajectory   │────▶│  VERL GRPO   │
+│  (vLLM)      │◀────│  (MuJoCo/SUMO)   │     │  Collector    │     │  Training    │
+└──────────────┘     └──────────────────┘     └───────────────┘     └──────────────┘
+       ▲                                                                     │
+       └─────────────────── Fine-tuned Model ◀───────────────────────────────┘
+```
+
+### Quick Start: Generate Training Data
+
+```bash
+# 1. Generate trajectories (dry-run, no LLM server needed)
+python training/scripts/run_rollout.py --dry-run --episodes 5 --tasks all
+
+# 2. Export to VERL Parquet format
+python training/scripts/run_export.py --input data/trajectories --output data/parquet
+
+# 3. (With real LLM) Point at your vLLM server
+python training/scripts/run_rollout.py \
+    --model-url http://localhost:8000/v1 \
+    --model-name Qwen/Qwen3-8B \
+    --backend mujoco_mock \
+    --episodes 100
+
+# 4. Launch VERL post-training (requires GPU + verl installed)
+python training/scripts/run_verl_train.py --config training/configs/verl_grpo.yaml
+```
+
+### Pre-defined Tasks (11 task templates)
+
+| Category | Tasks | Backend |
+|----------|-------|---------|
+| Robot Control | stand, walk 2m, turn 90°, sit, walk+sit | `mujoco_mock` |
+| IoT Devices | turn on lamp, turn off TV, sleep mode, check temperature | `mock` |
+| Traffic/AV | set speed limit, change traffic light | `sumo_mock` |
+
+### Reward Functions
+
+| Function | Formula | Use Case |
+|----------|---------|----------|
+| `task_success` | 1.0 if done, 0.0 if not | Basic pass/fail |
+| `efficiency` | 1.0 - 0.1 × extra_steps | Penalize verbose agents |
+| `safety` | -1.0 on violation | Safety-critical operations |
+| `composite` | 0.6×success + 0.3×efficiency + 0.1×safety | Default for VERL |
+
+### VERL Integration
+
+The exported Parquet files are directly compatible with [VERL](https://github.com/volcengine/verl) (Volcano Engine Reinforcement Learning):
+
+```yaml
+# training/configs/verl_grpo.yaml
+data:
+  train_files: ./data/parquet/train.parquet
+  val_files: ./data/parquet/eval.parquet
+algorithm:
+  name: grpo
+  kl_coef: 0.05
+model:
+  path: Qwen/Qwen3-8B
+```
+
+---
+
 ## 🧪 Testing
 
 ```bash
@@ -388,6 +456,7 @@ python tests/test_mujoco_e2e_demo.py
 | Phase 2: Multi-device | ✅ Done | VirtualHome adapter, cross-backend orchestration |
 | Phase 3: Robot Integration | ✅ Done | MuJoCo adapter, Unitree Go1, gait control, robot MCP tools |
 | Phase 3.5: Multi-Simulator | ✅ Done | +5 adapters: SUMO, PyBullet, Gazebo, Webots, Scenic (238 tests) |
+| Phase 3.6: Training Pipeline | ✅ Done | Rollout engine, VERL export, reward functions, 11 task templates |
 | Phase 4: Production Ready | 🔜 Next | Adapter SDK + CLI scaffold, benchmark dataset, Docker deployment |
 | Phase 5: Open Source Release | 🔜 Planned | Documentation site, contributor guide, community building |
 | Phase 6: Ecosystem | 🔮 Future | Real device protocols, multi-robot, autonomous driving (non-safety) |

@@ -1,0 +1,23 @@
+data:
+  train_files: ./data/parquet/train.parquet
+  val_files: ./data/parquet/eval.parquet
+  max_prompt_length: 1024
+  max_response_length: 2048
+  train_batch_size: 256
+  prompt_key: "prompt"
+
+model:
+  path: Qwen/Qwen3-8B
+  enable_gradient_checkpointing: true
+
+algorithm:
+  name: grpo
+  kl_coef: 0.05
+  gamma: 1.0
+  num_generations: 4
+
+trainer:
+  total_epochs: 3
+  save_freq: 500
+  project_name: "physical-ai-harness"
+  experiment_name: "grpo-qwen3-8b"

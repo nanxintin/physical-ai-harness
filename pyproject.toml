@@ -27,6 +27,17 @@ pybullet = [
 scenic = [
     "scenic>=3.0.0",
 ]
+training = [
+    "openai>=1.0.0",
+    "pandas>=2.0.0",
+    "pyarrow>=14.0.0",
+    "pyyaml>=6.0",
+]
+verl = [
+    "verl>=0.2.0",
+    "torch>=2.0.0",
+    "vllm>=0.4.0",
+]
 all = [
     "mujoco>=3.0.0",
     "numpy>=1.24.0",
@@ -35,6 +46,9 @@ all = [
     "sumolib>=1.18.0",
     "pybullet>=3.2.0",
     "scenic>=3.0.0",
+    "openai>=1.0.0",
+    "pandas>=2.0.0",
+    "pyarrow>=14.0.0",
 ]
 
 [build-system]

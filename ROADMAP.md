@@ -69,6 +69,26 @@ Build an open-source hardware orchestration framework for Physical AI. Short-ter
 
 ---
 
+## Phase 3.6: Training Data Pipeline ✅
+
+**Timeline**: Week 11-12  
+**Goal**: Generate RL training data from agent-environment interactions for VERL post-training
+
+| Task | Priority | Status |
+|------|----------|--------|
+| Trajectory data model + serialization | P0 | ✅ |
+| Rollout engine (Qwen + Harness + adapter) | P0 | ✅ |
+| Dry-run mode (scripted LLM for testing) | P0 | ✅ |
+| 11 pre-defined task templates (robot + IoT + traffic) | P0 | ✅ |
+| VERL-compatible Parquet export | P0 | ✅ |
+| Reward functions (success + efficiency + safety + composite) | P0 | ✅ |
+| VERL GRPO training config | P1 | ✅ |
+| Auto-backend routing (task type → correct adapter) | P1 | ✅ |
+
+**Verified**: 22 trajectories generated in dry-run, exported to Parquet, all 5 VERL columns present.
+
+---
+
 ## Phase 4: Production Ready (Month 3-4)
 
 **Goal**: From demo to usable developer tooling
