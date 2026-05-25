@@ -18,7 +18,7 @@
   <img src="https://img.shields.io/badge/python-3.10+-blue?logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/MCP-native-green?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHRleHQgeT0iMTgiIGZvbnQtc2l6ZT0iMTYiPuKalDwvdGV4dD48L3N2Zz4=" alt="MCP"/>
   <img src="https://img.shields.io/badge/license-Apache_2.0-orange" alt="License"/>
-  <img src="https://img.shields.io/badge/simulation-AI2--THOR_%7C_MuJoCo-purple" alt="Simulation"/>
+  <img src="https://img.shields.io/badge/simulators-8_backends-purple" alt="Simulation"/>
 </p>
 
 ---
@@ -207,13 +207,19 @@ python demo/run_demo.py
 
 ### Available Backends
 
-| Backend | Env Variable | Use Case |
-|---------|-------------|----------|
-| `mock` | `HARNESS_BACKEND=mock` | IoT device mock (default, no GPU) |
-| `ai2thor` | `HARNESS_BACKEND=ai2thor` | AI2-THOR Unity simulation |
-| `virtualhome` | `HARNESS_BACKEND=virtualhome` | VirtualHome graph simulation |
-| `mujoco` | `HARNESS_BACKEND=mujoco` | MuJoCo physics (real simulation) |
-| `mujoco_mock` | `HARNESS_BACKEND=mujoco_mock` | Robot mock (no GPU, CI-friendly) |
+| Backend | Env Variable | Domain | Simulator |
+|---------|-------------|--------|-----------|
+| `mock` | `HARNESS_BACKEND=mock` | IoT Devices | In-memory mock |
+| `ai2thor` | `HARNESS_BACKEND=ai2thor` | IoT Devices | AI2-THOR (Unity) |
+| `virtualhome` | `HARNESS_BACKEND=virtualhome` | IoT Devices | VirtualHome (graph) |
+| `mujoco` / `mujoco_mock` | `HARNESS_BACKEND=mujoco` | Quadruped Robot | MuJoCo (Unitree Go1) |
+| `sumo` / `sumo_mock` | `HARNESS_BACKEND=sumo` | Traffic/AV | SUMO (TraCI) |
+| `pybullet` / `pybullet_mock` | `HARNESS_BACKEND=pybullet` | Robot Arm | PyBullet (Franka Panda) |
+| `gazebo` / `gazebo_mock` | `HARNESS_BACKEND=gazebo` | Mobile Robot | Gazebo Harmonic (TurtleBot3) |
+| `webots` / `webots_mock` | `HARNESS_BACKEND=webots` | Mobile Robot | Webots R2025a (e-puck) |
+| `scenic` / `scenic_mock` | `HARNESS_BACKEND=scenic` | AV Scenarios | Scenic (CARLA-backed) |
+
+> **Tip**: Every real backend has a `_mock` variant that runs without the simulator binary — perfect for development and CI.
 
 ### Writing Your Own Adapter
 
@@ -319,16 +325,19 @@ physical-ai-harness/
 # IoT pipeline (36 tests)
 python tests/test_full_pipeline.py
 
-# Robot pipeline (49 tests)
+# MuJoCo robot (49 tests)
 python tests/test_mujoco_pipeline.py
 
-# Robot MCP tools (28 tests)
+# MuJoCo MCP tools (28 tests)
 python tests/test_mujoco_mcp_tools.py
+
+# New adapters: SUMO, PyBullet, Gazebo, Webots, Scenic (125 tests)
+python tests/test_new_adapters.py
 
 # End-to-end agent demo
 python tests/test_mujoco_e2e_demo.py
 
-# All tests: 113 passed, 0 failed
+# Total: 238 tests, 0 failures
 ```
 
 ---

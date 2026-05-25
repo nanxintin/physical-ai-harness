@@ -1,0 +1,7 @@
+{
+  "suite": "new_adapters_pipeline",
+  "adapters_tested": 5,
+  "total": 125,
+  "passed": 125,
+  "failed": 0
+}

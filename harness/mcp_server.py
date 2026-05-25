@@ -33,6 +33,36 @@ elif _BACKEND == "mujoco":
 elif _BACKEND == "mujoco_mock":
     from harness.adapters.mujoco_go1.mock_adapter import MockMuJoCoAdapter
     adapter = MockMuJoCoAdapter(event_bus=event_bus)
+elif _BACKEND == "sumo":
+    from harness.adapters.sumo.adapter import SUMOAdapter
+    adapter = SUMOAdapter(event_bus=event_bus)
+elif _BACKEND == "sumo_mock":
+    from harness.adapters.sumo.mock_adapter import MockSUMOAdapter
+    adapter = MockSUMOAdapter(event_bus=event_bus)
+elif _BACKEND == "pybullet":
+    from harness.adapters.pybullet_arm.adapter import PyBulletArmAdapter
+    adapter = PyBulletArmAdapter(event_bus=event_bus)
+elif _BACKEND == "pybullet_mock":
+    from harness.adapters.pybullet_arm.mock_adapter import MockPyBulletArmAdapter
+    adapter = MockPyBulletArmAdapter(event_bus=event_bus)
+elif _BACKEND == "gazebo":
+    from harness.adapters.gazebo.adapter import GazeboAdapter
+    adapter = GazeboAdapter(event_bus=event_bus)
+elif _BACKEND == "gazebo_mock":
+    from harness.adapters.gazebo.mock_adapter import MockGazeboAdapter
+    adapter = MockGazeboAdapter(event_bus=event_bus)
+elif _BACKEND == "webots":
+    from harness.adapters.webots.adapter import WebotsAdapter
+    adapter = WebotsAdapter(event_bus=event_bus)
+elif _BACKEND == "webots_mock":
+    from harness.adapters.webots.mock_adapter import MockWebotsAdapter
+    adapter = MockWebotsAdapter(event_bus=event_bus)
+elif _BACKEND == "scenic":
+    from harness.adapters.scenic.adapter import ScenicAdapter
+    adapter = ScenicAdapter(event_bus=event_bus)
+elif _BACKEND == "scenic_mock":
+    from harness.adapters.scenic.mock_adapter import MockScenicAdapter
+    adapter = MockScenicAdapter(event_bus=event_bus)
 elif _BACKEND in ("mock", "1", "true", "yes") or os.environ.get("HARNESS_MOCK", "").lower() in ("1", "true", "yes"):
     from harness.adapters.mock_adapter import MockAdapter
     adapter = MockAdapter(event_bus=event_bus)
