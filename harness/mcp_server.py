@@ -27,6 +27,12 @@ _BACKEND = os.environ.get("HARNESS_BACKEND", "mock").lower()
 if _BACKEND == "virtualhome":
     from harness.adapters.virtualhome_adapter import VirtualHomeAdapter
     adapter = VirtualHomeAdapter(event_bus=event_bus)
+elif _BACKEND == "mujoco":
+    from harness.adapters.mujoco_go1.adapter import MuJoCoAdapter
+    adapter = MuJoCoAdapter(event_bus=event_bus)
+elif _BACKEND == "mujoco_mock":
+    from harness.adapters.mujoco_go1.mock_adapter import MockMuJoCoAdapter
+    adapter = MockMuJoCoAdapter(event_bus=event_bus)
 elif _BACKEND in ("mock", "1", "true", "yes") or os.environ.get("HARNESS_MOCK", "").lower() in ("1", "true", "yes"):
     from harness.adapters.mock_adapter import MockAdapter
     adapter = MockAdapter(event_bus=event_bus)
@@ -137,15 +143,23 @@ async def device_control(device_id: str, property_name: str, value: str) -> str:
             "requires_confirmation": check.requires_confirmation,
         })
 
-    bool_value = value.lower() in ("true", "on", "1", "yes")
+    # Determine value type from CDD capability
+    cap = next((c for c in cdd.capabilities if c.name == property_name), None)
+    if cap and cap.cap_type == "float":
+        try:
+            typed_value = float(value)
+        except ValueError:
+            return json.dumps({"status": "error", "message": f"Invalid float value: {value}"})
+    else:
+        typed_value = value.lower() in ("true", "on", "1", "yes")
 
     try:
-        new_state = await adapter.set_property(device_id, property_name, bool_value)
+        new_state = await adapter.set_property(device_id, property_name, typed_value)
         return json.dumps({
             "status": "success",
             "device_id": device_id,
             "property": property_name,
-            "new_value": bool_value,
+            "new_value": typed_value,
             "full_state": new_state.to_dict(),
         }, indent=2)
     except (ValueError, RuntimeError) as e:
@@ -196,6 +210,11 @@ async def events_history(limit: int = 10) -> str:
     """
     history = event_bus.get_history(limit=limit)
     return json.dumps({"events": history}, indent=2, default=str)
+
+
+if _BACKEND in ("mujoco", "mujoco_mock"):
+    from harness.mcp_tools_robot import register_robot_tools
+    register_robot_tools(mcp, adapter, sandbox)
 
 
 def main():

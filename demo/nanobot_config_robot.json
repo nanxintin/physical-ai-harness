@@ -1,0 +1,29 @@
+{
+  "agents": {
+    "defaults": {
+      "model": "claude-sonnet-4-6",
+      "systemPromptFile": "demo/system_prompt_robot.md",
+      "workspace": "."
+    }
+  },
+  "providers": {
+    "anthropic": {
+      "apiKey": "${ANTHROPIC_API_KEY}"
+    }
+  },
+  "tools": {
+    "mcp_servers": {
+      "harness": {
+        "type": "stdio",
+        "command": "python",
+        "args": ["-m", "harness.mcp_server"],
+        "env": {"HARNESS_BACKEND": "mujoco_mock"},
+        "tool_timeout": 120,
+        "enabled_tools": ["*"]
+      }
+    }
+  },
+  "gateway": {
+    "port": 18800
+  }
+}

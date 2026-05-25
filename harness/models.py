@@ -62,6 +62,7 @@ class CDD:
                     "writable": c.writable,
                     "safety_level": c.safety_level.value,
                     "description": c.description,
+                    **({"value_range": c.value_range} if c.value_range else {}),
                 }
                 for c in self.capabilities
             ],

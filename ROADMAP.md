@@ -56,15 +56,19 @@
 
 ## Phase 3: 四足机器人集成（Week 7-10）
 
-**目标**：通过 MuJoCo 仿真加入四足机器人，展示跨设备类型的统一编排
+**目标**：通过 MuJoCo 仿真加入四足机器人，展示跨设备类型的统一编排  
+**状态**：✅ 核心完成
 
-| 任务 | 优先级 | 说明 |
-|------|--------|------|
-| MuJoCo Adapter 实现 | P0 | Unitree Go1 四足：move_to/read_sensor/invoke_action |
-| 跨平台编排 Demo | P0 | 机器人巡逻 + IoT 设备联动 |
-| Robotics CDD 设计 | P1 | 扩展 Capability Model 支持 move_to/stream_data |
-| 安全等级扩展 | P1 | 机器人操作默认 CRITICAL，需确认 |
-| 统一 WebUI | P2 | 双窗口：AI2-THOR 场景 + MuJoCo 机器人 |
+| 任务 | 优先级 | 状态 | 说明 |
+|------|--------|------|------|
+| MuJoCo Adapter 实现 | P0 | ✅ | MuJoCoAdapter + MockMuJoCoAdapter，12关节+传感器+动作 |
+| Robotics CDD 设计 | P0 | ✅ | 25 capabilities（关节/传感器/动作），value_range 支持 |
+| 安全等级扩展 | P0 | ✅ | 运动 HIGH，快速步态 CRITICAL，急停 MEDIUM |
+| Robot MCP 工具 | P0 | ✅ | robot_move/robot_joints/robot_sensors 三个专属工具 |
+| 步态控制器 | P1 | ✅ | 正弦开环步态（walk/trot/turn），GaitController |
+| 测试覆盖 | P1 | ✅ | 49+28 tests passed（pipeline + MCP tools + E2E） |
+| 跨平台编排 Demo | P1 | 🔜 | 机器人巡逻 + IoT 设备联动 |
+| 统一 WebUI | P2 | 🔜 | 双窗口：AI2-THOR 场景 + MuJoCo 机器人 |
 
 ---
 
