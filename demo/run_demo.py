@@ -49,7 +49,7 @@ async def process_command(user_input: str, history: list):
 
     user_lower = user_input.lower()
 
-    if any(w in user_lower for w in ["list", "what devices", "show devices", "什么设备", "列出"]):
+    if any(w in user_lower for w in ["list", "what devices", "show devices"]):
         devices = await adapter.list_devices()
         lines = []
         for d in devices:
@@ -59,12 +59,12 @@ async def process_command(user_input: str, history: list):
         if len(devices) > 30:
             response_text += f"\n... and {len(devices) - 30} more"
 
-    elif any(w in user_lower for w in ["capture", "screenshot", "看看", "show", "scene", "photo"]):
+    elif any(w in user_lower for w in ["capture", "screenshot", "show", "scene", "photo"]):
         img_b64 = await adapter.capture_image()
         image_data = base64.b64decode(img_b64)
         response_text = "Here's the current scene view."
 
-    elif any(w in user_lower for w in ["describe", "status", "overview", "状态", "情况"]):
+    elif any(w in user_lower for w in ["describe", "status", "overview"]):
         devices = await adapter.list_devices()
         lines = []
         for d in devices[:20]:
@@ -73,7 +73,7 @@ async def process_command(user_input: str, history: list):
             lines.append(f"• {d.display_name}: {state_str}")
         response_text = f"Scene status ({adapter._scene}):\n\n" + "\n".join(lines)
 
-    elif any(w in user_lower for w in ["turn on", "open", "打开", "开"]):
+    elif any(w in user_lower for w in ["turn on", "open"]):
         target = _find_device_in_text(user_input)
         if target:
             cdd = adapter._devices.get(target)
@@ -91,7 +91,7 @@ async def process_command(user_input: str, history: list):
         else:
             response_text = "I couldn't identify which device to control. Try listing devices first."
 
-    elif any(w in user_lower for w in ["turn off", "close", "关闭", "关"]):
+    elif any(w in user_lower for w in ["turn off", "close"]):
         target = _find_device_in_text(user_input)
         if target:
             cdd = adapter._devices.get(target)
@@ -109,7 +109,7 @@ async def process_command(user_input: str, history: list):
         else:
             response_text = "I couldn't identify which device to control. Try listing devices first."
 
-    elif any(w in user_lower for w in ["load", "scene", "加载场景"]):
+    elif any(w in user_lower for w in ["load", "scene"]):
         import re
         match = re.search(r"FloorPlan\d+", user_input)
         scene_name = match.group(0) if match else "FloorPlan1"

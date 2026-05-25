@@ -1,0 +1,204 @@
+{
+  "suite": "mujoco_pipeline",
+  "total": 49,
+  "passed": 49,
+  "failed": 0,
+  "results": [
+    {
+      "name": "device_count is 1",
+      "passed": true
+    },
+    {
+      "name": "device_type is quadruped_robot",
+      "passed": true
+    },
+    {
+      "name": "engine is mujoco_mock",
+      "passed": true
+    },
+    {
+      "name": "12 actuators",
+      "passed": true
+    },
+    {
+      "name": "adapter is initialized",
+      "passed": true
+    },
+    {
+      "name": "single device (robot)",
+      "passed": true
+    },
+    {
+      "name": "device_id is unitree_go1",
+      "passed": true
+    },
+    {
+      "name": "device_type correct",
+      "passed": true
+    },
+    {
+      "name": "safety_class is HIGH",
+      "passed": true
+    },
+    {
+      "name": "25 capabilities (got 25)",
+      "passed": true
+    },
+    {
+      "name": "12 joint capabilities (got 12)",
+      "passed": true
+    },
+    {
+      "name": "4 sensor capabilities (got 4)",
+      "passed": true
+    },
+    {
+      "name": "8 action capabilities (got 8)",
+      "passed": true
+    },
+    {
+      "name": "joint has value_range",
+      "passed": true
+    },
+    {
+      "name": "hip min range correct",
+      "passed": true
+    },
+    {
+      "name": "hip max range correct",
+      "passed": true
+    },
+    {
+      "name": "value_range serialized in to_dict()",
+      "passed": true
+    },
+    {
+      "name": "state has correct device_id",
+      "passed": true
+    },
+    {
+      "name": "has joint_FR_hip",
+      "passed": true
+    },
+    {
+      "name": "has body_position",
+      "passed": true
+    },
+    {
+      "name": "has body_orientation",
+      "passed": true
+    },
+    {
+      "name": "has foot_contacts",
+      "passed": true
+    },
+    {
+      "name": "initial action is stand",
+      "passed": true
+    },
+    {
+      "name": "raises ValueError on invalid device_id",
+      "passed": true
+    },
+    {
+      "name": "joint set to 0.5",
+      "passed": true
+    },
+    {
+      "name": "joint set to -0.5",
+      "passed": true
+    },
+    {
+      "name": "rejects out-of-range value",
+      "passed": true
+    },
+    {
+      "name": "rejects non-joint property",
+      "passed": true
+    },
+    {
+      "name": "rejects unknown actuator",
+      "passed": true
+    },
+    {
+      "name": "walk_forward succeeds",
+      "passed": true
+    },
+    {
+      "name": "position advanced by speed*duration",
+      "passed": true
+    },
+    {
+      "name": "turn_left succeeds",
+      "passed": true
+    },
+    {
+      "name": "turned ~45 degrees",
+      "passed": true
+    },
+    {
+      "name": "sit succeeds",
+      "passed": true
+    },
+    {
+      "name": "body lowered for sit",
+      "passed": true
+    },
+    {
+      "name": "stop succeeds",
+      "passed": true
+    },
+    {
+      "name": "velocity zeroed on stop",
+      "passed": true
+    },
+    {
+      "name": "rejects unknown action",
+      "passed": true
+    },
+    {
+      "name": "stand (HIGH) allowed by sandbox",
+      "passed": true
+    },
+    {
+      "name": "walk_forward (HIGH) allowed",
+      "passed": true
+    },
+    {
+      "name": "trot is CRITICAL",
+      "passed": true
+    },
+    {
+      "name": "stop is MEDIUM",
+      "passed": true
+    },
+    {
+      "name": "event emitted on joint control",
+      "passed": true
+    },
+    {
+      "name": "event type is state_changed",
+      "passed": true
+    },
+    {
+      "name": "event emitted on action",
+      "passed": true
+    },
+    {
+      "name": "action event has correct action",
+      "passed": true
+    },
+    {
+      "name": "image is string",
+      "passed": true
+    },
+    {
+      "name": "image has content",
+      "passed": true
+    },
+    {
+      "name": "valid PNG header",
+      "passed": true
+    }
+  ]
+}

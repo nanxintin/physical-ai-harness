@@ -1,244 +1,374 @@
-# Physical AI Harness
+<p align="center">
+  <h1 align="center">🤖 Physical AI Harness</h1>
+  <p align="center">
+    <em>Let AI Agents perceive and control any physical device through a unified interface.</em>
+  </p>
+</p>
 
-**让 AI Agent 以统一接口感知和操控一切物理设备。**
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-mcp-tools">MCP Tools</a> •
+  <a href="#-adapters">Adapters</a> •
+  <a href="#-roadmap">Roadmap</a>
+</p>
 
-Physical AI Harness 是一个面向 AI Agent 的开源硬件编排框架，通过统一的 Capability Model 和 MCP 协议，将仿真/真实物理设备暴露为 Agent 可调用的标准化工具。
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.10+-blue?logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/MCP-native-green?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHRleHQgeT0iMTgiIGZvbnQtc2l6ZT0iMTYiPuKalDwvdGV4dD48L3N2Zz4=" alt="MCP"/>
+  <img src="https://img.shields.io/badge/license-Apache_2.0-orange" alt="License"/>
+  <img src="https://img.shields.io/badge/simulation-AI2--THOR_%7C_MuJoCo-purple" alt="Simulation"/>
+</p>
+
+---
+
+## 🌟 What is Physical AI Harness?
+
+Physical AI Harness is an open-source hardware orchestration framework for AI Agents. It exposes simulated and real physical devices as standardized tools via the **Model Context Protocol (MCP)**, enabling any LLM-powered agent to sense and control the physical world.
 
 ```
-User (自然语言)
+User (natural language)
     ↓
-Agent (Claude / GPT / MiMo)
+AI Agent (Claude / GPT / any LLM)
     ↓ MCP Protocol
-Harness MCP Server
-    ├── Safety Sandbox (四级安全校验)
-    ├── Event Bus (状态变更事件)
-    └── Adapter Layer (可插拔)
-         ↓
+┌─────────────────────────────────────┐
+│  Physical AI Harness                │
+│  ├── Safety Sandbox (4-level)       │
+│  ├── Event Bus (async pub/sub)      │
+│  └── Adapter Layer (pluggable)      │
+│       ├── AI2-THOR (IoT devices)    │
+│       ├── MuJoCo (quadruped robot)  │
+│       └── Your adapter here...      │
+└─────────────────────────────────────┘
+    ↓
 Physical / Simulated Devices
 ```
 
-## 核心特性
+### Key Design Principles
 
-- **Capability-First 抽象**：所有设备按能力原语建模（set_property / read_sensor / invoke_action / capture_image），而非按设备类型硬编码
-- **MCP 原生**：通过 Model Context Protocol 暴露工具，任何支持 MCP 的 Agent 即插即用
-- **四级安全沙箱**：LOW → MEDIUM → HIGH → CRITICAL，CRITICAL 级操作自动拦截
-- **插件化适配层**：实现 `Adapter` 接口即可接入新的仿真/真实设备后端
-- **AI2-THOR 仿真**：内置 AI2-THOR 适配器，120+ 预置房间，600+ 可交互物体
+| Principle | Description |
+|-----------|-------------|
+| **Capability-First** | Devices are modeled by what they can do (capabilities), not by type |
+| **MCP-Native** | Any MCP-compatible agent can connect instantly |
+| **Safety-by-Default** | 4-level safety sandbox: LOW → MEDIUM → HIGH → CRITICAL |
+| **Plugin Architecture** | Implement the `Adapter` interface to add any new backend |
+| **Model-Agnostic** | Works with Claude, GPT, open-source models, or any LLM |
 
-## 快速开始
+---
 
-### 安装
+## ⚡ Quick Start
+
+### Installation
 
 ```bash
-cd harness
+git clone https://github.com/nanxintin/physical-ai-harness.git
+cd physical-ai-harness
 pip install -e .
+
+# For MuJoCo robot support (optional)
+pip install -e ".[mujoco]"
 ```
 
-### 方式一：MCP Server（推荐，与任何 Agent 框架集成）
+### Option 1: MCP Server (recommended — integrates with any agent)
 
 ```bash
-# 启动 MCP Server（stdio 模式）
-python -m harness.mcp_server
+# IoT simulation (mock mode, no GPU needed)
+HARNESS_BACKEND=mock python -m harness.mcp_server
+
+# Robot simulation (mock mode)
+HARNESS_BACKEND=mujoco_mock python -m harness.mcp_server
+
+# Real MuJoCo physics
+MUJOCO_GL=egl HARNESS_BACKEND=mujoco python -m harness.mcp_server
 ```
 
-在 Agent 框架中配置 MCP 连接（以 NanoBot 为例）：
-
-```json
-{
-  "tools": {
-    "mcp_servers": {
-      "harness": {
-        "type": "stdio",
-        "command": "python",
-        "args": ["-m", "harness.mcp_server"],
-        "tool_timeout": 120
-      }
-    }
-  }
-}
-```
-
-### 方式二：Gradio Demo（可视化交互）
-
-```bash
-python demo/run_demo.py
-# 打开 http://localhost:7860
-```
-
-### 方式三：Python SDK 直接调用
+### Option 2: Python SDK
 
 ```python
 import asyncio
-from harness.adapters.ai2thor_adapter import AI2ThorAdapter
+from harness.adapters.mujoco_go1.adapter import MuJoCoAdapter
 
 async def main():
-    adapter = AI2ThorAdapter()
-    await adapter.initialize("FloorPlan1")
-    
-    # 发现设备
+    adapter = MuJoCoAdapter()
+    await adapter.initialize("flat_ground")
+
+    # Discover devices
     devices = await adapter.list_devices()
-    print(f"Found {len(devices)} devices")
-    
-    # 控制设备
-    lamps = [d for d in devices if "Lamp" in d.device_type]
-    if lamps:
-        state = await adapter.set_property(lamps[0].device_id, "isToggled", True)
-        print(f"Lamp state: {state.properties}")
-    
-    # 捕获场景图像
-    image_b64 = await adapter.capture_image()
+    print(f"Found: {devices[0].display_name} with {len(devices[0].capabilities)} capabilities")
+
+    # Control the robot
+    await adapter.invoke_action("unitree_go1", "walk_forward", {"speed": 0.3, "duration": 2.0})
+
+    # Read sensors
+    state = await adapter.get_device_state("unitree_go1")
+    print(f"Position: {state.properties['body_position']}")
+
+    await adapter.shutdown()
 
 asyncio.run(main())
 ```
 
-## MCP 工具列表
+### Option 3: Gradio Demo (visual interaction)
 
-### 通用工具（所有后端）
+```bash
+python demo/run_demo.py
+# Open http://localhost:7860
+```
 
-| 工具 | 说明 |
-|------|------|
-| `scene_load` | 加载场景（IoT: FloorPlan1-430, Robot: flat_ground） |
-| `devices_list` | 列出所有可控设备及能力描述 |
-| `device_state` | 查询设备当前状态 |
-| `device_control` | 设置设备属性（布尔/浮点数） |
-| `scene_capture` | 截取当前场景图像（base64 PNG） |
-| `scene_describe` | 描述场景中所有设备状态 |
-| `events_history` | 查询近期设备事件 |
+---
 
-### 机器人专属工具（HARNESS_BACKEND=mujoco/mujoco_mock）
+## 🏗️ Architecture
 
-| 工具 | 说明 |
-|------|------|
-| `robot_move` | 高级运动指令（stand/sit/walk/turn/trot/stop） |
-| `robot_joints` | 直接设置关节角度（JSON 格式） |
-| `robot_sensors` | 一次性读取全部传感器数据 |
+```
+┌──────────────────────────────────────────────────────────┐
+│  Layer 3: AI Agent (Claude / GPT / any LLM)              │
+│           ↕ MCP Protocol (stdio / SSE)                   │
+├──────────────────────────────────────────────────────────┤
+│  Layer 2: Harness Core                                   │
+│  ┌────────────┬──────────────┬────────────────────────┐  │
+│  │ MCP Server │ Safety       │ Event Bus              │  │
+│  │ (FastMCP)  │ Sandbox      │ (async pub/sub)        │  │
+│  └────────────┴──────────────┴────────────────────────┘  │
+├──────────────────────────────────────────────────────────┤
+│  Layer 1: Adapter Layer (pluggable backends)             │
+│  ┌──────────────┬────────────────┬────────────────────┐  │
+│  │ AI2-THOR     │ MuJoCo Go1     │ VirtualHome        │  │
+│  │ (IoT sim)    │ (robot sim)    │ (graph sim)        │  │
+│  └──────────────┴────────────────┴────────────────────┘  │
+├──────────────────────────────────────────────────────────┤
+│  Layer 0: Simulation Backends                            │
+│  Unity (AI2-THOR) │ MuJoCo (physics) │ Graph Engine     │
+└──────────────────────────────────────────────────────────┘
+```
 
-## Capability Model (CDD)
+---
 
-每个设备通过 **Capability Description Document** 声明能力：
+## ✨ Features
+
+### 🏠 IoT Smart Home Simulation (AI2-THOR)
+
+- 120+ pre-built rooms (kitchens, living rooms, bedrooms, bathrooms)
+- 600+ interactive objects (lamps, TVs, fridges, microwaves, faucets...)
+- Automatic CDD generation from scene metadata
+- Unity-quality rendering
+
+### 🐕 Quadruped Robot (MuJoCo + Unitree Go1)
+
+- 12 joint actuators (4 legs × 3 DOF)
+- Body state sensors (position, orientation, velocity, IMU)
+- Foot contact detection
+- High-level locomotion: stand, sit, walk, turn, trot, stop
+- Open-loop sinusoidal gait controller
+- EGL headless rendering for CI/CD
+
+### 🛡️ Safety Sandbox
+
+| Level | Devices | Policy |
+|-------|---------|--------|
+| 🟢 LOW | Lamps, TVs, laptops | Execute freely |
+| 🟡 MEDIUM | Fridge, microwave, e-stop | Parameter validation |
+| 🔴 HIGH | Stove, faucet, robot joints | Warn before execution |
+| ⛔ CRITICAL | Safe, fast gaits (trot) | Block, require human confirmation |
+
+### 📡 Event-Driven Architecture
+
+- Async event bus with publish/subscribe
+- State change tracking with full history
+- Event-triggered multi-device orchestration
+
+---
+
+## 🔧 MCP Tools
+
+### Universal Tools (all backends)
+
+| Tool | Description |
+|------|-------------|
+| `scene_load` | Load a simulation scene |
+| `devices_list` | List all controllable devices with capabilities |
+| `device_state` | Query current device state |
+| `device_control` | Set device properties (boolean or float) |
+| `scene_capture` | Capture scene image (base64 PNG) |
+| `scene_describe` | Describe all device states |
+| `events_history` | Query recent device events |
+
+### Robot Tools (mujoco backend only)
+
+| Tool | Description |
+|------|-------------|
+| `robot_move` | High-level locomotion (stand/sit/walk/turn/trot/stop) |
+| `robot_joints` | Direct joint angle control (JSON targets) |
+| `robot_sensors` | Read all sensor data at once |
+
+---
+
+## 🔌 Adapters
+
+### Available Backends
+
+| Backend | Env Variable | Use Case |
+|---------|-------------|----------|
+| `mock` | `HARNESS_BACKEND=mock` | IoT device mock (default, no GPU) |
+| `ai2thor` | `HARNESS_BACKEND=ai2thor` | AI2-THOR Unity simulation |
+| `virtualhome` | `HARNESS_BACKEND=virtualhome` | VirtualHome graph simulation |
+| `mujoco` | `HARNESS_BACKEND=mujoco` | MuJoCo physics (real simulation) |
+| `mujoco_mock` | `HARNESS_BACKEND=mujoco_mock` | Robot mock (no GPU, CI-friendly) |
+
+### Writing Your Own Adapter
+
+Implement the `Adapter` abstract class (6 async methods):
+
+```python
+from harness.adapter import Adapter
+
+class MyAdapter(Adapter):
+    async def initialize(self, scene: str) -> dict:
+        """Load scene, return metadata."""
+
+    async def list_devices(self) -> list[CDD]:
+        """Return Capability Description Documents for all devices."""
+
+    async def get_device_state(self, device_id: str) -> DeviceState:
+        """Read current device state."""
+
+    async def set_property(self, device_id: str, property_name: str, value) -> DeviceState:
+        """Set a device property."""
+
+    async def invoke_action(self, device_id: str, action: str, params=None) -> dict:
+        """Execute a discrete action."""
+
+    async def capture_image(self) -> str:
+        """Capture scene view as base64 PNG."""
+```
+
+---
+
+## 📦 Capability Model (CDD)
+
+Every device declares its capabilities through a **Capability Description Document**:
 
 ```json
 {
-  "device_id": "FloorLamp|+01.32|+00.00|+00.45",
-  "device_type": "FloorLamp",
-  "display_name": "FloorLamp",
-  "safety_class": "low",
+  "device_id": "unitree_go1",
+  "device_type": "quadruped_robot",
+  "display_name": "Unitree Go1",
+  "safety_class": "high",
   "capabilities": [
-    {"name": "isToggled", "type": "boolean", "writable": true, "description": "Power on/off state"}
+    {
+      "name": "joint_FR_hip",
+      "type": "float",
+      "writable": true,
+      "safety_level": "high",
+      "value_range": {"min": -0.863, "max": 0.863},
+      "description": "Joint position target (radians)"
+    },
+    {
+      "name": "walk_forward",
+      "type": "action",
+      "writable": true,
+      "safety_level": "high",
+      "description": "Walk forward at given speed"
+    }
   ]
 }
 ```
 
-AI2-THOR 适配器从场景元数据**自动生成** CDD，无需手动编写。
+---
 
-## 安全等级
-
-| 等级 | 设备示例 | 策略 |
-|------|---------|------|
-| 🟢 LOW | 灯、电视、笔记本 | 直接执行 |
-| 🟡 MEDIUM | 冰箱、微波炉、窗户 | 参数校验后执行 |
-| 🔴 HIGH | 灶台、水龙头 | 警告用户后执行 |
-| ⛔ CRITICAL | 保险箱 | 拒绝执行，要求人工确认 |
-
-## 项目结构
+## 📁 Project Structure
 
 ```
-harness/
+physical-ai-harness/
 ├── harness/
-│   ├── models.py              # CDD, DeviceState, SafetyLevel
-│   ├── adapter.py             # Adapter 抽象接口
-│   ├── safety.py              # SafetySandbox
-│   ├── events.py              # EventBus
-│   ├── mcp_server.py          # FastMCP Server 入口
-│   ├── mcp_tools_robot.py     # 机器人专属 MCP 工具
+│   ├── models.py                  # CDD, DeviceState, SafetyLevel
+│   ├── adapter.py                 # Abstract Adapter interface
+│   ├── safety.py                  # Safety Sandbox
+│   ├── events.py                  # Async Event Bus
+│   ├── mcp_server.py             # FastMCP Server (10 tools)
+│   ├── mcp_tools_robot.py        # Robot-specific MCP tools
 │   └── adapters/
-│       ├── ai2thor_adapter.py       # AI2-THOR IoT 仿真
-│       ├── virtualhome_adapter.py   # VirtualHome 仿真
-│       ├── mock_adapter.py          # IoT Mock 测试
-│       └── mujoco_go1/             # MuJoCo 四足机器人
-│           ├── adapter.py           # MuJoCoAdapter（真实仿真）
-│           ├── mock_adapter.py      # MockMuJoCoAdapter（测试用）
-│           ├── robot_config.py      # 关节/姿态/动作配置
-│           ├── locomotion.py        # 步态控制器
-│           └── models/unitree_go1/  # Go1 MJCF 模型文件
+│       ├── ai2thor_adapter.py         # AI2-THOR (IoT simulation)
+│       ├── virtualhome_adapter.py     # VirtualHome (graph sim)
+│       ├── mock_adapter.py            # IoT mock (testing)
+│       └── mujoco_go1/               # MuJoCo quadruped robot
+│           ├── adapter.py             # Real physics adapter
+│           ├── mock_adapter.py        # Robot mock (testing)
+│           ├── robot_config.py        # Joint/pose/action config
+│           ├── locomotion.py          # Gait controller
+│           └── models/unitree_go1/    # MJCF model files
 ├── demo/
-│   ├── nanobot_config.json     # NanoBot 集成配置
-│   ├── system_prompt.md        # Agent 系统提示词
-│   └── run_demo.py             # Gradio WebUI
-└── pyproject.toml
+│   ├── run_demo.py                # Gradio WebUI
+│   ├── system_prompt.md           # Agent prompt (IoT)
+│   └── system_prompt_robot.md     # Agent prompt (robot)
+├── tests/
+│   ├── test_full_pipeline.py      # IoT adapter tests (36 tests)
+│   ├── test_mujoco_pipeline.py    # Robot adapter tests (49 tests)
+│   ├── test_mujoco_mcp_tools.py   # Robot MCP tools (28 tests)
+│   └── test_mujoco_e2e_demo.py    # End-to-end agent simulation
+├── pyproject.toml
+├── README.md
+└── ROADMAP.md
 ```
 
-## AI2-THOR 场景
+---
 
-| 场景范围 | 类型 | 推荐 |
-|---------|------|------|
-| FloorPlan1-30 | 厨房 | ⭐ 最佳 Demo（丰富的电器交互） |
-| FloorPlan201-230 | 客厅 | 灯、电视、电子设备 |
-| FloorPlan301-330 | 卧室 | 灯、百叶窗 |
-| FloorPlan401-430 | 浴室 | 水龙头、毛巾 |
-
-## 后端选择
-
-通过环境变量 `HARNESS_BACKEND` 切换后端：
-
-| 值 | 后端 | 用途 |
-|------|------|------|
-| `mock`（默认） | MockAdapter | IoT 设备 Mock 测试 |
-| `ai2thor` | AI2ThorAdapter | AI2-THOR Unity IoT 仿真 |
-| `virtualhome` | VirtualHomeAdapter | VirtualHome 图仿真 |
-| `mujoco` | MuJoCoAdapter | MuJoCo 四足机器人（真实物理） |
-| `mujoco_mock` | MockMuJoCoAdapter | 四足机器人 Mock（无 GPU） |
+## 🧪 Testing
 
 ```bash
-# IoT 模式
-HARNESS_BACKEND=mock python -m harness.mcp_server
+# IoT pipeline (36 tests)
+python tests/test_full_pipeline.py
 
-# 机器人模式（真实 MuJoCo 仿真）
-HARNESS_BACKEND=mujoco python -m harness.mcp_server
+# Robot pipeline (49 tests)
+python tests/test_mujoco_pipeline.py
 
-# 机器人模式（Mock，CI/测试用）
-HARNESS_BACKEND=mujoco_mock python -m harness.mcp_server
+# Robot MCP tools (28 tests)
+python tests/test_mujoco_mcp_tools.py
+
+# End-to-end agent demo
+python tests/test_mujoco_e2e_demo.py
+
+# All tests: 113 passed, 0 failed
 ```
 
-## MuJoCo 机器人
+---
 
-### Unitree Go1 四足机器人
+## 🗺️ Roadmap
 
-- 12 关节执行器（4 腿 × 3 自由度）
-- 传感器：体态、IMU、足底接触
-- 高级动作：stand/sit/walk/turn/trot/stop
-- 安全等级：运动控制 HIGH，快速步态 CRITICAL
+| Phase | Status | Description |
+|-------|--------|-------------|
+| Phase 0: MVP | ✅ Done | Core models, safety sandbox, event bus, AI2-THOR adapter, MCP server |
+| Phase 1: E2E Validation | ✅ Done | Mock adapter, full test suite, Gradio demo |
+| Phase 2: Multi-device | ✅ Done | VirtualHome adapter, cross-backend orchestration |
+| Phase 3: Robot Integration | ✅ Done | MuJoCo adapter, Unitree Go1, gait control, robot MCP tools |
+| Phase 4: Production Ready | 🔜 Next | Adapter SDK + CLI scaffold, benchmark dataset, Docker deployment |
+| Phase 5: Open Source Release | 🔜 Planned | Documentation site, contributor guide, community building |
+| Phase 6: Ecosystem | 🔮 Future | Real device protocols, multi-robot, autonomous driving (non-safety) |
 
-```python
-# 快速验证
-MUJOCO_GL=egl HARNESS_BACKEND=mujoco python -c "
-import asyncio
-from harness.adapters.mujoco_go1.adapter import MuJoCoAdapter
-async def main():
-    a = MuJoCoAdapter()
-    await a.initialize('flat_ground')
-    await a.invoke_action('unitree_go1', 'walk_forward', {'speed': 0.3, 'duration': 2.0})
-    state = await a.get_device_state('unitree_go1')
-    print(f'Position: {state.properties[\"body_position\"]}')
-    await a.shutdown()
-asyncio.run(main())
-"
-```
+See [ROADMAP.md](ROADMAP.md) for detailed milestones.
 
-### 安装 MuJoCo 依赖
+---
 
-```bash
-pip install mujoco>=3.0.0 numpy PyOpenGL
-# EGL rendering 需要 libEGL（WSL2 通常已有）
-```
+## 🔧 Requirements
 
-## 环境要求
+- **Python**: 3.10+
+- **AI2-THOR**: Requires display (X server or `xvfb-run` on WSL2)
+- **MuJoCo**: Requires EGL or OSMesa (`MUJOCO_GL=egl`)
+- **Memory**: 16GB+ (AI2-THOR Unity process ~4GB)
 
-- Python 3.10+
-- AI2-THOR 需要图形环境（WSL2 需 X server 或 `xvfb-run`）
-- MuJoCo 需要 EGL 或 OSMesa（`MUJOCO_GL=egl`）
-- 内存 16GB+（AI2-THOR Unity 进程约占 4GB）
+---
 
-## License
+## 🤝 Contributing
 
-Apache 2.0
+We welcome contributions! To add a new simulation backend:
+
+1. Implement the `Adapter` interface (6 methods)
+2. Add backend selection in `mcp_server.py`
+3. Write tests following the existing pattern
+4. Submit a PR
+
+---
+
+## 📄 License
+
+[Apache 2.0](LICENSE)

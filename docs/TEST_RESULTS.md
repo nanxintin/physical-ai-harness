@@ -1,143 +1,143 @@
-# 测试结果报告
+# Test Results Report
 
-## 测试环境
+## Test Environment
 
-| 项目 | 值 |
-|------|------|
-| 系统 | Linux 6.6.87.2-microsoft-standard-WSL2 |
+| Item | Value |
+|------|-------|
+| System | Linux 6.6.87.2-microsoft-standard-WSL2 |
 | Python | 3.10.12 |
-| AI2-THOR | 5.0.0（Mock 模式测试） |
+| AI2-THOR | 5.0.0 (Mock mode testing) |
 | MCP SDK | 1.27.1 |
-| 日期 | 2026-05-20 |
+| Date | 2026-05-20 |
 
-## 测试套件 1：Full Pipeline（Mock Adapter）
+## Test Suite 1: Full Pipeline (Mock Adapter)
 
-**文件**：`tests/test_full_pipeline.py`  
-**结果**：✅ **36/36 passed**
+**File**: `tests/test_full_pipeline.py`  
+**Result**: ✅ **36/36 passed**
 
-| 测试组 | 项数 | 状态 |
-|--------|------|------|
-| Adapter Initialization | 7 | ✅ 全部通过 |
-| Device State Query | 3 | ✅ 全部通过 |
-| Device Control | 5 | ✅ 全部通过 |
-| Safety Sandbox | 6 | ✅ 全部通过 |
-| Event Bus | 4 | ✅ 全部通过 |
-| Image Capture | 4 | ✅ 全部通过 |
-| Multi-Device Orchestration | 2 | ✅ 全部通过 |
-| CDD Format | 5 | ✅ 全部通过 |
+| Test Group | Count | Status |
+|------------|-------|--------|
+| Adapter Initialization | 7 | ✅ All passed |
+| Device State Query | 3 | ✅ All passed |
+| Device Control | 5 | ✅ All passed |
+| Safety Sandbox | 6 | ✅ All passed |
+| Event Bus | 4 | ✅ All passed |
+| Image Capture | 4 | ✅ All passed |
+| Multi-Device Orchestration | 2 | ✅ All passed |
+| CDD Format | 5 | ✅ All passed |
 
-### 关键验证点
+### Key Verification Points
 
-- **设备发现**：Mock 场景包含 10 个设备（FloorLamp, DeskLamp, Television, Fridge, Microwave, StoveBurner, Faucet, Window, Safe, CoffeeMachine）
-- **属性控制**：支持 isToggled（开关）和 isOpen（开合）两种属性类型
-- **安全沙箱**：
-  - LOW/MEDIUM/HIGH 级设备在 `max_allowed=HIGH` 时允许通过 ✅
-  - CRITICAL 级设备自动拦截并要求人工确认 ✅
-  - 严格模式 `max_allowed=MEDIUM` 正确阻断 HIGH 级操作 ✅
-- **事件总线**：状态变更事件正确触发和记录 ✅
-- **图像捕获**：生成有效 PNG 图像 ✅
+- **Device Discovery**: Mock scene contains 10 devices (FloorLamp, DeskLamp, Television, Fridge, Microwave, StoveBurner, Faucet, Window, Safe, CoffeeMachine)
+- **Property Control**: Supports both isToggled (on/off) and isOpen (open/close) property types
+- **Safety Sandbox**:
+  - LOW/MEDIUM/HIGH level devices pass when `max_allowed=HIGH` ✅
+  - CRITICAL level devices are automatically blocked and require human confirmation ✅
+  - Strict mode `max_allowed=MEDIUM` correctly blocks HIGH level operations ✅
+- **Event Bus**: State change events are correctly triggered and recorded ✅
+- **Image Capture**: Generates valid PNG images ✅
 
-### Bug 修复记录
+### Bug Fix Log
 
-| 时间 | 问题 | 修复 |
-|------|------|------|
-| 初次运行 | CRITICAL 设备通过了安全检查 | SafetySandbox.check() 逻辑修正：capability 安全等级取设备级别和 capability 级别的较高者 |
-
----
-
-## 测试套件 2：MCP Server Tools
-
-**文件**：`tests/test_mcp_server.py`  
-**结果**：✅ **12/12 passed**
-
-| 工具 | 测试内容 | 状态 |
-|------|---------|------|
-| `scene_load` | 加载场景返回设备计数和类型列表 | ✅ |
-| `devices_list` | 无过滤返回全部 10 设备 | ✅ |
-| `devices_list(filter)` | 按 "Lamp" 过滤返回 2 个 | ✅ |
-| `device_state` | 查询 FloorLamp 初始状态 isToggled=False | ✅ |
-| `device_control` (on) | 开灯成功，状态变为 True | ✅ |
-| `device_control` (open) | 开冰箱成功，状态变为 True | ✅ |
-| `device_control` (blocked) | Safe 被安全沙箱拦截，返回 blocked_by_safety | ✅ |
-| `scene_capture` | 返回有效 base64 PNG（26556 字符） | ✅ |
-| `scene_describe` | 返回 10 设备的状态描述文本 | ✅ |
-| `events_history` | 返回 2 条状态变更事件 | ✅ |
-| 错误处理 | 不存在的设备返回 error 字段 | ✅ |
-| 持久性 | 跨调用场景状态保持 | ✅ |
+| Time | Issue | Fix |
+|------|-------|-----|
+| Initial run | CRITICAL devices passed safety checks | SafetySandbox.check() logic corrected: capability safety level now takes the higher of device level and capability level |
 
 ---
 
-## AI2-THOR 真实测试
+## Test Suite 2: MCP Server Tools
 
-**状态**：⚠️ 当前 WSL2 环境受限，无法完成
+**File**: `tests/test_mcp_server.py`  
+**Result**: ✅ **12/12 passed**
 
-### 环境问题诊断
+| Tool | Test Content | Status |
+|------|-------------|--------|
+| `scene_load` | Loading scene returns device count and type list | ✅ |
+| `devices_list` | Unfiltered returns all 10 devices | ✅ |
+| `devices_list(filter)` | Filtering by "Lamp" returns 2 | ✅ |
+| `device_state` | Query FloorLamp initial state isToggled=False | ✅ |
+| `device_control` (on) | Turn on lamp succeeds, state becomes True | ✅ |
+| `device_control` (open) | Open fridge succeeds, state becomes True | ✅ |
+| `device_control` (blocked) | Safe is blocked by safety sandbox, returns blocked_by_safety | ✅ |
+| `scene_capture` | Returns valid base64 PNG (26556 characters) | ✅ |
+| `scene_describe` | Returns status description text for 10 devices | ✅ |
+| `events_history` | Returns 2 state change events | ✅ |
+| Error handling | Non-existent device returns error field | ✅ |
+| Persistence | Scene state persists across calls | ✅ |
 
-| 尝试方案 | 结果 | 原因 |
-|---------|------|------|
-| 默认启动 | Unity 进程 `<defunct>` | 缺少 libGL/Mesa/Vulkan 库 |
-| `platform=CloudRendering` | 超时 | 需要 NVIDIA CloudRendering 支持 |
-| `x_display="0"` | 超时 | WSLg X server 无 OpenGL 加速 |
+---
 
-### 所需环境
+## AI2-THOR Real-Environment Testing
 
-AI2-THOR Unity 二进制已成功下载（769MB → ~/.ai2thor/releases/，含 UnityPlayer.so 32MB），但启动需要：
+**Status**: ⚠️ Currently limited by WSL2 environment, cannot complete
+
+### Environment Diagnostics
+
+| Approach | Result | Reason |
+|----------|--------|--------|
+| Default launch | Unity process `<defunct>` | Missing libGL/Mesa/Vulkan libraries |
+| `platform=CloudRendering` | Timeout | Requires NVIDIA CloudRendering support |
+| `x_display="0"` | Timeout | WSLg X server lacks OpenGL acceleration |
+
+### Required Environment
+
+The AI2-THOR Unity binary has been successfully downloaded (769MB → ~/.ai2thor/releases/, includes UnityPlayer.so 32MB), but launching requires:
 
 ```bash
-# 方案 1：安装 Mesa OpenGL（需要 sudo）
+# Option 1: Install Mesa OpenGL (requires sudo)
 sudo apt-get install -y xvfb libvulkan1 libgl1-mesa-glx libglu1-mesa
 xvfb-run python tests/test_ai2thor_real.py
 
-# 方案 2：在有 GPU 的机器上运行
-# AI2-THOR 支持 Linux + NVIDIA GPU (推荐) 或 macOS
+# Option 2: Run on a machine with a GPU
+# AI2-THOR supports Linux + NVIDIA GPU (recommended) or macOS
 
-# 方案 3：Docker with GPU
+# Option 3: Docker with GPU
 docker run --gpus all -it python:3.10 bash
 pip install ai2thor && python -c "from ai2thor.controller import Controller; ..."
 ```
 
-### 验证脚本就绪
+### Verification Script Ready
 
-`tests/test_ai2thor_real.py` 已编写完成，覆盖：
-- [x] 场景加载 + 性能计时
-- [x] 设备发现 + 分类统计
-- [x] Toggle/Open 操作（含安全检查）
-- [x] 图像捕获 + PNG 验证
-- [x] 多设备编排场景
-- [x] 事件追踪
-- [x] 安全沙箱实战验证
+`tests/test_ai2thor_real.py` has been written and covers:
+- [x] Scene loading + performance timing
+- [x] Device discovery + category statistics
+- [x] Toggle/Open operations (with safety checks)
+- [x] Image capture + PNG verification
+- [x] Multi-device orchestration scenarios
+- [x] Event tracking
+- [x] Safety sandbox real-world verification
 
-在有图形环境的机器上执行即可：`python tests/test_ai2thor_real.py`
-
----
-
-## 性能指标（Mock 模式）
-
-| 操作 | 平均耗时 |
-|------|---------|
-| 场景初始化 | < 1ms |
-| 设备列表查询 | < 1ms |
-| 单设备状态查询 | < 1ms |
-| 设备属性控制 | < 1ms |
-| 图像生成（800x600 PNG） | ~5ms |
-| 场景描述（10 设备） | < 2ms |
+Run on a machine with a graphics environment: `python tests/test_ai2thor_real.py`
 
 ---
 
-## 设计改进记录
+## Performance Metrics (Mock Mode)
 
-基于测试反馈的优化：
+| Operation | Average Time |
+|-----------|-------------|
+| Scene initialization | < 1ms |
+| Device list query | < 1ms |
+| Single device state query | < 1ms |
+| Device property control | < 1ms |
+| Image generation (800x600 PNG) | ~5ms |
+| Scene description (10 devices) | < 2ms |
 
-1. **SafetySandbox 逻辑修正**  
-   - 问题：按 capability 查询时覆盖了设备级安全等级
-   - 修复：取设备级别和 capability 级别的较高值
-   - 影响：CRITICAL 设备现在无论查询哪个 capability 都会被正确拦截
+---
 
-2. **Mock Adapter 引入**  
-   - 动机：AI2-THOR 需要 769MB 二进制下载 + 图形环境，不利于快速开发和 CI
-   - 设计：完整模拟 10 个设备行为，可视化输出设备状态的 PNG 图像
-   - 使用：`HARNESS_MOCK=1` 环境变量切换
+## Design Improvement Log
 
-3. **MCP Server 环境变量切换**  
-   - 通过 `HARNESS_MOCK=1` 在 Mock/AI2-THOR 模式间无缝切换
-   - NanoBot 配置中通过 `env` 字段传递
+Optimizations based on test feedback:
+
+1. **SafetySandbox Logic Correction**  
+   - Issue: Querying by capability overrode the device-level safety class
+   - Fix: Take the higher value between device level and capability level
+   - Impact: CRITICAL devices are now correctly blocked regardless of which capability is queried
+
+2. **Mock Adapter Introduction**  
+   - Motivation: AI2-THOR requires a 769MB binary download + graphics environment, which hinders rapid development and CI
+   - Design: Fully simulates 10 device behaviors, generates PNG images visualizing device states
+   - Usage: Switch via `HARNESS_MOCK=1` environment variable
+
+3. **MCP Server Environment Variable Switching**  
+   - Seamlessly switch between Mock/AI2-THOR modes via `HARNESS_MOCK=1`
+   - Passed through the `env` field in NanoBot configuration
