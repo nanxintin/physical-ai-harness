@@ -148,14 +148,14 @@ python demo/run_demo.py
 │  Layer 1: Adapter Layer (8 pluggable backends)               │
 │  ┌────────────┬────────────┬──────────┬───────────────────┐  │
 │  │ AI2-THOR   │ MuJoCo     │ PyBullet │ Gazebo Harmonic   │  │
-│  │ (IoT)      │ (Go1 quad) │ (Panda)  │ (TurtleBot3)     │  │
+│  │ (IoT)      │ (Go1 quad) │ (Panda)  │ (TurtleBot3)      │  │
 │  ├────────────┼────────────┼──────────┼───────────────────┤  │
 │  │ Webots     │ SUMO       │ Scenic   │ VirtualHome       │  │
-│  │ (e-puck)   │ (traffic)  │ (AV)     │ (graph)          │  │
+│  │ (e-puck)   │ (traffic)  │ (AV)     │ (graph)           │  │
 │  └────────────┴────────────┴──────────┴───────────────────┘  │
 ├──────────────────────────────────────────────────────────────┤
 │  Layer 0: Simulation Engines                                 │
-│  Unity │ MuJoCo │ Bullet │ gz-sim │ Webots │ SUMO │ CARLA  │
+│  Unity │ MuJoCo │ Bullet │ gz-sim │ Webots │ SUMO │ CARLA    │
 └──────────────────────────────────────────────────────────────┘
 ```
 
