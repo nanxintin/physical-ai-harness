@@ -1,0 +1,29 @@
+{
+  "primitives": [
+    "reach",
+    "grasp",
+    "release"
+  ],
+  "learned": [
+    "pick_up_object_from_table",
+    "place_object_at_target",
+    "stack_block_on_block"
+  ],
+  "history": [
+    {
+      "name": "pick_up_object_from_table",
+      "source": "composition",
+      "cycle": 0
+    },
+    {
+      "name": "place_object_at_target",
+      "source": "composition",
+      "cycle": 1
+    },
+    {
+      "name": "stack_block_on_block",
+      "source": "composition",
+      "cycle": 2
+    }
+  ]
+}

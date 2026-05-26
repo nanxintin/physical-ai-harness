@@ -1,0 +1,36 @@
+{
+  "cycle": 1,
+  "skills_proposed": 1,
+  "skills_imagination_passed": 1,
+  "skills_real_validated": 1,
+  "skills_promoted": 1,
+  "wm_train_loss": -4.791611366589862,
+  "wm_eval_metrics": {
+    "mean_state_error": 0.0019418253796175122,
+    "max_dim_error": 0.002696416573598981,
+    "contact_accuracy": 1.0,
+    "joint_error_rad": 0.0020160928834229708,
+    "ee_error_m": 0.0022230155300348997,
+    "step_1_error": 0.0018917829729616642,
+    "step_2_error": 0.003213054733350873,
+    "step_3_error": 0.004425934050232172,
+    "step_4_error": 0.005569172091782093,
+    "step_5_error": 0.006716103758662939
+  },
+  "skill_library_size": 6,
+  "total_real_interactions": 1615,
+  "elapsed_seconds": 30.670819997787476,
+  "details": {
+    "goals": [
+      "Place a held object at a target location",
+      "Push an object to a target position",
+      "Sort objects by moving them to different zones"
+    ],
+    "proposed_skills": [
+      "push"
+    ],
+    "promoted_skills": [
+      "push"
+    ]
+  }
+}

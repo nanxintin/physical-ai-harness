@@ -1,0 +1,23 @@
+{
+  "primitives": [
+    "reach",
+    "grasp",
+    "release"
+  ],
+  "learned": [
+    "pick_up",
+    "stack"
+  ],
+  "history": [
+    {
+      "name": "pick_up",
+      "source": "composition",
+      "cycle": 0
+    },
+    {
+      "name": "stack",
+      "source": "composition",
+      "cycle": 1
+    }
+  ]
+}

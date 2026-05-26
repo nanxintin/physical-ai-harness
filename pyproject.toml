@@ -17,12 +17,16 @@ mujoco = [
     "PyOpenGL>=3.1.0",
 ]
 sumo = [
+    "eclipse-sumo>=1.20.0",
     "traci>=1.18.0",
     "sumolib>=1.18.0",
 ]
 pybullet = [
     "pybullet>=3.2.0",
     "numpy>=1.24.0",
+]
+mqtt = [
+    "paho-mqtt>=1.6.0",
 ]
 scenic = [
     "scenic>=3.0.0",
@@ -31,6 +35,11 @@ training = [
     "openai>=1.0.0",
     "pandas>=2.0.0",
     "pyarrow>=14.0.0",
+    "pyyaml>=6.0",
+]
+world_model = [
+    "torch>=2.0.0",
+    "numpy>=1.24.0",
     "pyyaml>=6.0",
 ]
 verl = [
@@ -42,9 +51,11 @@ all = [
     "mujoco>=3.0.0",
     "numpy>=1.24.0",
     "PyOpenGL>=3.1.0",
+    "eclipse-sumo>=1.20.0",
     "traci>=1.18.0",
     "sumolib>=1.18.0",
     "pybullet>=3.2.0",
+    "paho-mqtt>=1.6.0",
     "scenic>=3.0.0",
     "openai>=1.0.0",
     "pandas>=2.0.0",

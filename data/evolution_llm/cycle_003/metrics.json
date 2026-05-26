@@ -1,0 +1,40 @@
+{
+  "cycle": 3,
+  "skills_proposed": 3,
+  "skills_imagination_passed": 3,
+  "skills_real_validated": 3,
+  "skills_promoted": 3,
+  "wm_train_loss": -5.731908134142558,
+  "wm_eval_metrics": {
+    "mean_state_error": 0.000829490483738482,
+    "max_dim_error": 0.001283753663301468,
+    "contact_accuracy": 1.0,
+    "joint_error_rad": 0.0007955761393532157,
+    "ee_error_m": 0.0010915641905739903,
+    "step_1_error": 0.0008141964208334684,
+    "step_2_error": 0.0014096526429057121,
+    "step_3_error": 0.0019578803330659866,
+    "step_4_error": 0.002485169330611825,
+    "step_5_error": 0.003011106513440609
+  },
+  "skill_library_size": 13,
+  "total_real_interactions": 3204,
+  "elapsed_seconds": 87.82055878639221,
+  "details": {
+    "goals": [
+      "Pick up an object from the table",
+      "Place a held object at a target location",
+      "Push an object to a target position"
+    ],
+    "proposed_skills": [
+      "pick_object_from_workspace",
+      "place_held_object_at_target_location",
+      "push_object_to_target"
+    ],
+    "promoted_skills": [
+      "pick_object_from_workspace",
+      "place_held_object_at_target_location",
+      "push_object_to_target"
+    ]
+  }
+}

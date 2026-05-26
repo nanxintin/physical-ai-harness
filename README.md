@@ -20,7 +20,8 @@
   <img src="https://img.shields.io/badge/license-Apache_2.0-orange" alt="License"/>
   <img src="https://img.shields.io/badge/simulators-11_backends-purple" alt="Simulation"/>
   <img src="https://img.shields.io/badge/training-VERL_GRPO-red?logo=pytorch&logoColor=white" alt="Training"/>
-  <img src="https://img.shields.io/badge/tests-265_passed-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/tests-395_passed-brightgreen" alt="Tests"/>
+  <img src="https://img.shields.io/badge/real_tests-5_simulators-blue" alt="Real Tests"/>
 </p>
 
 ---
@@ -377,6 +378,7 @@ physical-ai-harness/
 │       ├── mock_adapter.py            # IoT mock
 │       ├── mujoco_go1/               # MuJoCo (Unitree Go1 quadruped)
 │       ├── sumo/                     # SUMO (traffic simulation)
+│       │   └── scenarios/            # .sumocfg + .net.xml + .rou.xml
 │       ├── pybullet_arm/             # PyBullet (Franka Panda arm)
 │       ├── gazebo/                   # Gazebo Harmonic (TurtleBot3)
 │       ├── webots/                   # Webots R2025a (e-puck)
@@ -404,12 +406,17 @@ physical-ai-harness/
 │   ├── run_demo.py               # Gradio WebUI
 │   ├── system_prompt.md          # Agent prompt (IoT)
 │   └── system_prompt_robot.md    # Agent prompt (robot)
-├── tests/                         # 265+ tests total
-│   ├── test_full_pipeline.py      # IoT (36 tests)
-│   ├── test_mujoco_pipeline.py    # MuJoCo robot (49 tests)
+├── tests/                         # 395+ tests total
+│   ├── test_full_pipeline.py      # IoT mock (36 tests)
+│   ├── test_mujoco_pipeline.py    # MuJoCo mock (49 tests)
 │   ├── test_mujoco_mcp_tools.py   # MuJoCo MCP tools (28 tests)
-│   ├── test_new_adapters.py       # SUMO+PyBullet+Gazebo+Webots+Scenic (125 tests)
-│   └── test_mujoco_e2e_demo.py    # End-to-end agent simulation
+│   ├── test_new_adapters.py       # 5-adapter mock (125 tests)
+│   ├── test_mujoco_e2e_demo.py    # End-to-end agent simulation
+│   ├── test_pybullet_real.py      # PyBullet REAL (52 tests)
+│   ├── test_sumo_real.py          # SUMO REAL (30 tests)
+│   ├── test_mqtt_real.py          # MQTT REAL (48 tests)
+│   ├── mini_mqtt_broker.py        # Lightweight Python MQTT broker
+│   └── mqtt_virtual_devices.py    # MQTT device simulator
 ├── pyproject.toml
 ├── README.md
 └── ROADMAP.md
@@ -487,6 +494,8 @@ model:
 
 ## 🧪 Testing
 
+### Mock Tests (no external dependencies)
+
 ```bash
 # IoT pipeline (36 tests)
 python tests/test_full_pipeline.py
@@ -503,17 +512,47 @@ python tests/test_new_adapters.py
 # End-to-end agent demo
 python tests/test_mujoco_e2e_demo.py
 
-# Smart hardware adapters: MQTT, Wearable, Home Assistant (27 tests)
-python -c "
-import asyncio, sys; sys.path.insert(0,'.')
-from harness.adapters.mqtt_iot.mock_adapter import MockMqttIotAdapter
-from harness.adapters.wearable.mock_adapter import MockWearableAdapter
-from harness.adapters.homeassistant.mock_adapter import MockHomeAssistantAdapter
-# ... (integrated test script)
-"
-
-# Total: 265+ tests, 0 failures
+# Total mock: 265+ tests, 0 failures
 ```
+
+### Real Integration Tests (actual simulators, no mocking)
+
+```bash
+# PyBullet: Franka Panda robot arm (52 tests)
+# Requires: pip install pybullet numpy Pillow
+python tests/test_pybullet_real.py
+
+# SUMO: Traffic simulation via TraCI (30 tests)
+# Requires: pip install eclipse-sumo traci sumolib
+python tests/test_sumo_real.py
+
+# MQTT IoT: Real pub/sub protocol (48 tests)
+# Requires: pip install paho-mqtt (uses built-in mini broker)
+python tests/test_mqtt_real.py
+
+# MuJoCo: Unitree Go1 quadruped (verified, adapter works directly)
+# Requires: pip install mujoco numpy Pillow
+
+# VirtualHome: CPU graph-based simulation (verified)
+# No extra dependencies (bundled evolving_graph engine)
+
+# Total real: 130 tests across 5 simulators, 0 failures
+```
+
+### Real Test Coverage Matrix
+
+| Simulator | Engine | GPU Required | Test Status |
+|-----------|--------|:---:|:---:|
+| VirtualHome | evolving_graph (CPU) | No | ✅ 6/6 operations |
+| MuJoCo | mujoco 3.8.1 | No (EGL) | ✅ 12 actuators |
+| PyBullet | pybullet 3.2.7 | No (DIRECT) | ✅ 52/52 |
+| SUMO | SUMO 1.27.0 (TraCI) | No | ✅ 30/30 |
+| MQTT IoT | paho-mqtt 2.1.0 | No | ✅ 48/48 |
+| AI2-THOR | Unity (OpenGL 3.2+) | **Yes** | ❌ Blocked (no GPU) |
+| Gazebo | gz-sim (ROS) | No | ❌ Needs ROS ecosystem |
+| Webots | Webots R2025a | No | ❌ Needs desktop install |
+| Scenic | CARLA | **Yes** | ❌ Needs CARLA + GPU |
+| Home Assistant | HA REST API | No | ❌ Needs HA instance |
 
 ---
 
@@ -528,6 +567,7 @@ from harness.adapters.homeassistant.mock_adapter import MockHomeAssistantAdapter
 | Phase 3.5: Multi-Simulator | ✅ Done | +5 adapters: SUMO, PyBullet, Gazebo, Webots, Scenic (238 tests) |
 | Phase 3.6: Training Pipeline | ✅ Done | Rollout engine, VERL export, reward functions, 11 task templates |
 | Phase 3.7: Smart Hardware | ✅ Done | +3 adapters: MQTT (protocol), Wearable (sensors), Home Assistant (platform) |
+| Phase 3.8: Real Integration | ✅ Done | 5/10 adapters tested with real simulators (130 assertions, 0 failures) |
 | Phase 4: Production Ready | 🔜 Next | Adapter SDK + CLI scaffold, benchmark dataset, Docker deployment |
 | Phase 5: Open Source Release | 🔜 Planned | Documentation site, contributor guide, community building |
 | Phase 6: Ecosystem | 🔮 Future | Real device protocols, multi-robot, autonomous driving (non-safety) |

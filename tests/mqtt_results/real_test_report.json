@@ -1,0 +1,272 @@
+{
+  "test_run": "mqtt_real_integration",
+  "timestamp": "2026-05-26 09:18:22",
+  "environment": {
+    "python": "3.10.12",
+    "platform": "linux",
+    "paho_mqtt_version": "2.1.0",
+    "broker": "mini_mqtt_broker (port 18830)",
+    "virtual_devices": true
+  },
+  "total_time_seconds": 4.139405965805054,
+  "passed": 48,
+  "failed": 0,
+  "total": 48,
+  "performance": {
+    "broker_connect": 0.0012013912200927734,
+    "pubsub_roundtrip": 0.001317739486694336,
+    "adapter_init": 0.002460479736328125,
+    "list_devices": 3.504753112792969e-05,
+    "get_state_light": 0.0014190673828125,
+    "get_state_sensor": 0.04777050018310547,
+    "set_power_on": 0.04363703727722168,
+    "set_brightness": 0.043866634368896484,
+    "set_color_temp": 0.0440518856048584,
+    "verify_state": 0.044722557067871094,
+    "init_full_scene": 0.005142927169799805,
+    "get_ac_state": 0.002164602279663086,
+    "set_ac_temp": 0.044115304946899414
+  },
+  "details": [
+    {
+      "name": "broker connection",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "message delivered",
+      "passed": true,
+      "detail": "received 1 msg"
+    },
+    {
+      "name": "payload intact",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "initialize succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "engine is mqtt_real",
+      "passed": true,
+      "detail": "got: mqtt_real"
+    },
+    {
+      "name": "2 devices in minimal",
+      "passed": true,
+      "detail": "got: 2"
+    },
+    {
+      "name": "correct device types",
+      "passed": true,
+      "detail": "got: ['smart_light', 'multi_sensor']"
+    },
+    {
+      "name": "broker info correct",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "2 devices returned",
+      "passed": true,
+      "detail": "got 2"
+    },
+    {
+      "name": "has bedroom_light",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has kitchen_sensor",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "light has power cap",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "light has brightness cap",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "light has color_temp cap",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "sensor has temperature",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "sensor has humidity",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "state returned",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has power",
+      "passed": true,
+      "detail": "power=False"
+    },
+    {
+      "name": "has brightness",
+      "passed": true,
+      "detail": "brightness=80.0"
+    },
+    {
+      "name": "has color_temp",
+      "passed": true,
+      "detail": "color_temp=4000.0"
+    },
+    {
+      "name": "has online",
+      "passed": true,
+      "detail": "online=True"
+    },
+    {
+      "name": "power initially off",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "brightness is 80",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "color_temp is 4000",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "sensor has temperature",
+      "passed": true,
+      "detail": "temp=23.5"
+    },
+    {
+      "name": "sensor temp is 23.5",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "sensor has humidity",
+      "passed": true,
+      "detail": "humidity=45.0"
+    },
+    {
+      "name": "set power succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "power is now True",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "set brightness succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "brightness is now 50",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "set color_temp succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "color_temp is now 3000",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "state persists",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rejects invalid device",
+      "passed": true,
+      "detail": "Device not found: nonexistent_device. Active devic"
+    },
+    {
+      "name": "rejects invalid property",
+      "passed": true,
+      "detail": "Unknown or read-only property: 'nonexistent_prop' "
+    },
+    {
+      "name": "event emitted on set",
+      "passed": true,
+      "detail": "1 new events"
+    },
+    {
+      "name": "has state_changed event",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "shutdown completes",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "5 devices in smart_home",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has smart_light",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has air_conditioner",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has smart_lock",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has multi_sensor",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has robot_vacuum",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "AC target_temp readable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "AC temp set to 22",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "full scene shutdown",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "primitives": [
+    "reach",
+    "grasp",
+    "release"
+  ],
+  "learned": [
+    "pick_up_object_from_table",
+    "place_object_at_target",
+    "stack_block_on_block",
+    "place_held_object_at_position",
+    "pick_object_from_table_center",
+    "deposit_held_object",
+    "stack",
+    "pick_object_from_workspace",
+    "place_held_object_at_target_location",
+    "push_object_to_target"
+  ],
+  "history": [
+    {
+      "name": "pick_up_object_from_table",
+      "source": "composition",
+      "cycle": 0
+    },
+    {
+      "name": "place_object_at_target",
+      "source": "composition",
+      "cycle": 1
+    },
+    {
+      "name": "stack_block_on_block",
+      "source": "composition",
+      "cycle": 2
+    },
+    {
+      "name": "pick_up_object_from_table",
+      "source": "composition",
+      "cycle": 3
+    },
+    {
+      "name": "place_held_object_at_position",
+      "source": "composition",
+      "cycle": 4
+    },
+    {
+      "name": "pick_object_from_table_center",
+      "source": "composition",
+      "cycle": 5
+    },
+    {
+      "name": "deposit_held_object",
+      "source": "composition",
+      "cycle": 6
+    },
+    {
+      "name": "stack",
+      "source": "composition",
+      "cycle": 7
+    },
+    {
+      "name": "pick_object_from_workspace",
+      "source": "composition",
+      "cycle": 8
+    },
+    {
+      "name": "place_held_object_at_target_location",
+      "source": "composition",
+      "cycle": 9
+    },
+    {
+      "name": "push_object_to_target",
+      "source": "composition",
+      "cycle": 10
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+{
+  "test_run": "pybullet_real_integration",
+  "timestamp": "2026-05-26 09:18:14",
+  "environment": {
+    "python": "3.10.12",
+    "platform": "linux",
+    "pybullet_version": "202010061",
+    "render_mode": "DIRECT"
+  },
+  "total_time_seconds": 0.4353158473968506,
+  "passed": 52,
+  "failed": 0,
+  "total": 52,
+  "performance": {
+    "initialize": 0.22974705696105957,
+    "list_devices": 3.0994415283203125e-06,
+    "get_state": 0.0003323554992675781,
+    "set_joint1": 0.005516529083251953,
+    "set_joint4": 0.0031142234802246094,
+    "open_gripper": 0.003065824508666992,
+    "close_gripper": 0.003039836883544922,
+    "home_action": 0.00608372688293457,
+    "pick_action": 0.03265643119812012,
+    "place_action": 0.0290219783782959,
+    "capture_image": 0.09662842750549316
+  },
+  "details": [
+    {
+      "name": "initialize succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "engine is pybullet",
+      "passed": true,
+      "detail": "got: pybullet"
+    },
+    {
+      "name": "model is franka_panda",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "7 joints reported",
+      "passed": true,
+      "detail": "got: 7"
+    },
+    {
+      "name": "1 device",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "one device returned",
+      "passed": true,
+      "detail": "got 1"
+    },
+    {
+      "name": "device_id is franka_panda",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "device_type is robot_arm",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has joint cap: panda_joint1",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has joint cap: panda_joint2",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has joint cap: panda_joint3",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has joint cap: panda_joint4",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has joint cap: panda_joint5",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has joint cap: panda_joint6",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has joint cap: panda_joint7",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has gripper_width cap",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has end_effector_position cap",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has home action",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has pick action",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has place action",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has all joint states",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "panda_joint1 near home",
+      "passed": true,
+      "detail": "value=0.0000, home=0.0000, diff=0.0000"
+    },
+    {
+      "name": "panda_joint2 near home",
+      "passed": true,
+      "detail": "value=-0.7850, home=-0.7850, diff=0.0000"
+    },
+    {
+      "name": "panda_joint3 near home",
+      "passed": true,
+      "detail": "value=0.0000, home=0.0000, diff=0.0000"
+    },
+    {
+      "name": "panda_joint4 near home",
+      "passed": true,
+      "detail": "value=-2.3560, home=-2.3560, diff=0.0000"
+    },
+    {
+      "name": "panda_joint5 near home",
+      "passed": true,
+      "detail": "value=0.0000, home=0.0000, diff=0.0000"
+    },
+    {
+      "name": "panda_joint6 near home",
+      "passed": true,
+      "detail": "value=1.5710, home=1.5710, diff=0.0000"
+    },
+    {
+      "name": "panda_joint7 near home",
+      "passed": true,
+      "detail": "value=0.7850, home=0.7850, diff=0.0000"
+    },
+    {
+      "name": "has gripper_width",
+      "passed": true,
+      "detail": "value=0.04"
+    },
+    {
+      "name": "has end_effector_position",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "end_effector is 3D",
+      "passed": true,
+      "detail": "pos=['0.307', '-0.000', '0.485']"
+    },
+    {
+      "name": "joint1 moved to target",
+      "passed": true,
+      "detail": "target=0.5, actual=0.5000, err=0.0000"
+    },
+    {
+      "name": "joint4 moved to mid-range",
+      "passed": true,
+      "detail": "target=-1.571, actual=-1.5708"
+    },
+    {
+      "name": "rejects out-of-range",
+      "passed": true,
+      "detail": "Joint value 99.0 out of range [-2.8973, 2.8973] for panda_jo"
+    },
+    {
+      "name": "open_gripper succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "gripper is open",
+      "passed": true,
+      "detail": "width=0.0400, max=0.04"
+    },
+    {
+      "name": "close_gripper succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "gripper is closed",
+      "passed": true,
+      "detail": "width=0.0000"
+    },
+    {
+      "name": "home action succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "all joints near home",
+      "passed": true,
+      "detail": "max_diff=0.0000"
+    },
+    {
+      "name": "pick action succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "end_effector moved",
+      "passed": true,
+      "detail": "pos=[0.403, 0.000, 0.139]"
+    },
+    {
+      "name": "gripper closed after pick",
+      "passed": true,
+      "detail": "width=0.0000"
+    },
+    {
+      "name": "place action succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "gripper open after place",
+      "passed": true,
+      "detail": "width=0.0400"
+    },
+    {
+      "name": "image returned",
+      "passed": true,
+      "detail": "26392 chars base64"
+    },
+    {
+      "name": "valid PNG",
+      "passed": true,
+      "detail": "19794 bytes"
+    },
+    {
+      "name": "saved to pybullet_scene.png",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "events emitted",
+      "passed": true,
+      "detail": "2 new events"
+    },
+    {
+      "name": "has state_changed event",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has action_executed event",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "shutdown completes",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

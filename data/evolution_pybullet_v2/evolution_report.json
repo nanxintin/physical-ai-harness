@@ -1,0 +1,191 @@
+{
+  "n_cycles": 5,
+  "final_skill_count": 6,
+  "total_real_interactions": 4016,
+  "cycles": [
+    {
+      "cycle": 0,
+      "skills_proposed": 2,
+      "skills_imagination_passed": 2,
+      "skills_real_validated": 2,
+      "skills_promoted": 2,
+      "wm_train_loss": -3.2185095271302595,
+      "wm_eval_metrics": {
+        "mean_state_error": 0.0038735545240342617,
+        "max_dim_error": 0.005276971962302923,
+        "contact_accuracy": 1.0,
+        "joint_error_rad": 0.0041621169075369835,
+        "ee_error_m": 0.0037818581331521273,
+        "step_1_error": 0.0038775871507823467,
+        "step_2_error": 0.006395193748176098,
+        "step_3_error": 0.008916028775274754,
+        "step_4_error": 0.011473256163299084,
+        "step_5_error": 0.01402850542217493
+      },
+      "skill_library_size": 5,
+      "total_real_interactions": 803,
+      "elapsed_seconds": 15.795189619064331,
+      "details": {
+        "goals": [
+          "Pick up an object from the table",
+          "Place a held object at a target location",
+          "Stack one block on top of another"
+        ],
+        "proposed_skills": [
+          "pick_up",
+          "stack"
+        ],
+        "promoted_skills": [
+          "pick_up",
+          "stack"
+        ]
+      }
+    },
+    {
+      "cycle": 1,
+      "skills_proposed": 1,
+      "skills_imagination_passed": 1,
+      "skills_real_validated": 1,
+      "skills_promoted": 1,
+      "wm_train_loss": -4.791611366589862,
+      "wm_eval_metrics": {
+        "mean_state_error": 0.0019418253796175122,
+        "max_dim_error": 0.002696416573598981,
+        "contact_accuracy": 1.0,
+        "joint_error_rad": 0.0020160928834229708,
+        "ee_error_m": 0.0022230155300348997,
+        "step_1_error": 0.0018917829729616642,
+        "step_2_error": 0.003213054733350873,
+        "step_3_error": 0.004425934050232172,
+        "step_4_error": 0.005569172091782093,
+        "step_5_error": 0.006716103758662939
+      },
+      "skill_library_size": 6,
+      "total_real_interactions": 1615,
+      "elapsed_seconds": 30.670819997787476,
+      "details": {
+        "goals": [
+          "Place a held object at a target location",
+          "Push an object to a target position",
+          "Sort objects by moving them to different zones"
+        ],
+        "proposed_skills": [
+          "push"
+        ],
+        "promoted_skills": [
+          "push"
+        ]
+      }
+    },
+    {
+      "cycle": 2,
+      "skills_proposed": 0,
+      "skills_imagination_passed": 0,
+      "skills_real_validated": 0,
+      "skills_promoted": 0,
+      "wm_train_loss": -5.46873718811585,
+      "wm_eval_metrics": {
+        "mean_state_error": 0.0006925640045665205,
+        "max_dim_error": 0.0010503851808607578,
+        "contact_accuracy": 1.0,
+        "joint_error_rad": 0.0006304625421762466,
+        "ee_error_m": 0.0009824495064094663,
+        "step_1_error": 0.0006073658005334437,
+        "step_2_error": 0.0010997618082910776,
+        "step_3_error": 0.0015555451391264796,
+        "step_4_error": 0.0019931455608457327,
+        "step_5_error": 0.0024351843167096376
+      },
+      "skill_library_size": 6,
+      "total_real_interactions": 2406,
+      "elapsed_seconds": 43.345672369003296,
+      "details": {
+        "goals": [
+          "Place a held object at a target location",
+          "Sort objects by moving them to different zones",
+          "Pour contents from one container to another"
+        ],
+        "proposed_skills": [],
+        "promoted_skills": []
+      }
+    },
+    {
+      "cycle": 3,
+      "skills_proposed": 0,
+      "skills_imagination_passed": 0,
+      "skills_real_validated": 0,
+      "skills_promoted": 0,
+      "wm_train_loss": -5.782200444474512,
+      "wm_eval_metrics": {
+        "mean_state_error": 0.0006719281664118171,
+        "max_dim_error": 0.0009671120205894113,
+        "contact_accuracy": 1.0,
+        "joint_error_rad": 0.0006362099084071815,
+        "ee_error_m": 0.0008503130520693958,
+        "step_1_error": 0.0006457313429564238,
+        "step_2_error": 0.001165915047749877,
+        "step_3_error": 0.0016638495726510882,
+        "step_4_error": 0.0021432831417769194,
+        "step_5_error": 0.0026326568331569433
+      },
+      "skill_library_size": 6,
+      "total_real_interactions": 3189,
+      "elapsed_seconds": 52.28143310546875,
+      "details": {
+        "goals": [
+          "Place a held object at a target location",
+          "Sort objects by moving them to different zones",
+          "Pour contents from one container to another"
+        ],
+        "proposed_skills": [],
+        "promoted_skills": []
+      }
+    },
+    {
+      "cycle": 4,
+      "skills_proposed": 0,
+      "skills_imagination_passed": 0,
+      "skills_real_validated": 0,
+      "skills_promoted": 0,
+      "wm_train_loss": -5.718722228337359,
+      "wm_eval_metrics": {
+        "mean_state_error": 0.0018527248175814748,
+        "max_dim_error": 0.00405795406550169,
+        "contact_accuracy": 1.0,
+        "joint_error_rad": 0.0020787070970982313,
+        "ee_error_m": 0.0014572221552953124,
+        "step_1_error": 0.001837150426581502,
+        "step_2_error": 0.003461124375462532,
+        "step_3_error": 0.005072375759482384,
+        "step_4_error": 0.00669040298089385,
+        "step_5_error": 0.008301165886223316
+      },
+      "skill_library_size": 6,
+      "total_real_interactions": 4016,
+      "elapsed_seconds": 68.89789938926697,
+      "details": {
+        "goals": [
+          "Place a held object at a target location",
+          "Sort objects by moving them to different zones",
+          "Pour contents from one container to another"
+        ],
+        "proposed_skills": [],
+        "promoted_skills": []
+      }
+    }
+  ],
+  "skill_growth": [
+    5,
+    6,
+    6,
+    6,
+    6
+  ],
+  "wm_errors": [
+    0.0038735545240342617,
+    0.0019418253796175122,
+    0.0006925640045665205,
+    0.0006719281664118171,
+    0.0018527248175814748
+  ]
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+
+    <vType id="car" accel="2.6" decel="4.5" sigma="0.5" length="5" minGap="2.5"
+           maxSpeed="16.67" guiShape="passenger"/>
+
+    <!-- Routes using generated grid edges: A0, A1, B0, B1 nodes -->
+    <route id="west_east" edges="A1A0 A0B0"/>
+    <route id="south_north" edges="B0B1 B1A1"/>
+    <route id="east_west" edges="B0A0 A0A1"/>
+
+    <!-- Vehicles -->
+    <vehicle id="veh_0" type="car" route="west_east" depart="0.00" departLane="0" departSpeed="10.0"/>
+    <vehicle id="veh_1" type="car" route="south_north" depart="2.00" departLane="0" departSpeed="10.0"/>
+    <vehicle id="veh_2" type="car" route="east_west" depart="5.00" departLane="0" departSpeed="8.0"/>
+
+</routes>

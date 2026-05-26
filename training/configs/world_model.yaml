@@ -1,0 +1,70 @@
+# World Model Self-Evolution Configuration
+# ==========================================
+
+# World Model Architecture
+world_model:
+  state_dim: 11         # 7 joints + 3 EE pos + 1 gripper (Franka)
+  action_dim: 16        # unified action vector
+  contact_dim: 4        # contact prediction channels
+  hidden_dim: 256       # transformer hidden size
+  n_heads: 4            # attention heads
+  n_layers: 4           # transformer layers
+  # Estimated parameters: ~2M
+
+# Training
+training:
+  lr: 3.0e-4
+  weight_decay: 1.0e-5
+  batch_size: 64
+  epochs_per_cycle: 30
+  state_loss_weight: 1.0
+  contact_loss_weight: 0.5
+  uncertainty_weight: 0.1
+  grad_clip: 1.0
+
+# Data Collection
+exploration:
+  episodes_per_cycle: 50
+  max_steps_per_episode: 20
+  random_action_noise: 0.2
+  reset_to_home: true
+
+# Skill Synthesis
+synthesis:
+  robot_type: franka      # "franka" | "go1"
+  use_llm: false          # false = rule-based for MVP testing
+  llm_model: claude-sonnet-4-6
+  goals_per_cycle: 5
+  max_action_steps: 30
+
+# Imagination Validation
+imagination:
+  n_scenarios: 30
+  max_rollout_steps: 50
+  success_threshold: 0.7
+  safety_threshold: 0.95
+  confidence_threshold: 0.6
+  noise_scale_base: 0.02
+  noise_scale_growth: 0.01
+
+# Real Validation
+real_validation:
+  episodes: 5
+  success_threshold: 0.5
+  timeout_seconds: 30
+
+# Evolution Loop
+evolution:
+  n_cycles: 5
+  output_dir: data/evolution
+  save_checkpoints: true
+  log_level: info
+
+# Evaluation
+evaluation:
+  multistep_horizons: [1, 3, 5]
+  eval_split_ratio: 0.2
+  target_joint_error_rad: 0.05
+  target_ee_error_m: 0.02
+  target_1step_accuracy: 0.85
+  target_3step_accuracy: 0.60

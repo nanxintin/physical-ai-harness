@@ -1,0 +1,9 @@
+{
+  "primitives": [
+    "reach",
+    "grasp",
+    "release"
+  ],
+  "learned": [],
+  "history": []
+}

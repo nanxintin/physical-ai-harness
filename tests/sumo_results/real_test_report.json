@@ -1,0 +1,177 @@
+{
+  "test_run": "sumo_real_integration",
+  "timestamp": "2026-05-26 09:18:18",
+  "environment": {
+    "python": "3.10.12",
+    "platform": "linux",
+    "sumo_binary": "<venv>/bin/sumo",
+    "sumo_home": "<venv>/lib/python3.10/site-packages/sumo",
+    "traci_version": 22
+  },
+  "sumo_binary_functional": true,
+  "total_time_seconds": 3.7625577449798584,
+  "passed": 30,
+  "failed": 0,
+  "total": 30,
+  "performance": {
+    "traci_start": 1.0111980438232422,
+    "step_10": 0.0017437934875488281,
+    "set_speed": 0.0017118453979492188,
+    "set_red": 0.00031065940856933594,
+    "set_green": 0.00018334388732910156,
+    "adapter_init": 1.0105609893798828
+  },
+  "details": [
+    {
+      "name": "traci importable",
+      "passed": true,
+      "detail": "version=22"
+    },
+    {
+      "name": "sumolib importable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "sumo binary found",
+      "passed": true,
+      "detail": "path=<venv>/bin/sumo"
+    },
+    {
+      "name": "sumo binary works",
+      "passed": true,
+      "detail": "Eclipse SUMO sumo 1.27.0"
+    },
+    {
+      "name": "intersection.sumocfg exists",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "intersection.net.xml exists",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "intersection.rou.xml exists",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "traci connected",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "simulation advanced",
+      "passed": true,
+      "detail": "time=1.0s"
+    },
+    {
+      "name": "vehicles present",
+      "passed": true,
+      "detail": "count=3"
+    },
+    {
+      "name": "vehicle veh_0 readable",
+      "passed": true,
+      "detail": "speed=11.2m/s, pos=(-4.8,10.9), lane=A1A0_0"
+    },
+    {
+      "name": "vehicle veh_1 readable",
+      "passed": true,
+      "detail": "speed=13.8m/s, pos=(104.8,61.8), lane=B0B1_0"
+    },
+    {
+      "name": "vehicle veh_2 readable",
+      "passed": true,
+      "detail": "speed=9.8m/s, pos=(80.3,4.8), lane=B0A0_0"
+    },
+    {
+      "name": "traffic lights found",
+      "passed": true,
+      "detail": "count=4"
+    },
+    {
+      "name": "TL A0 readable",
+      "passed": true,
+      "detail": "phase=0, state=GGGG, program=0"
+    },
+    {
+      "name": "TL A1 readable",
+      "passed": true,
+      "detail": "phase=0, state=GGGG, program=0"
+    },
+    {
+      "name": "TL B0 readable",
+      "passed": true,
+      "detail": "phase=0, state=GGGG, program=0"
+    },
+    {
+      "name": "TL B1 readable",
+      "passed": true,
+      "detail": "phase=0, state=GGGG, program=0"
+    },
+    {
+      "name": "speed changed",
+      "passed": true,
+      "detail": "target=5.0, actual=5.00"
+    },
+    {
+      "name": "original state readable",
+      "passed": true,
+      "detail": "state=GGGG"
+    },
+    {
+      "name": "set all red",
+      "passed": true,
+      "detail": "expected=rrrr, actual=rrrr"
+    },
+    {
+      "name": "set all green",
+      "passed": true,
+      "detail": "expected=GGGG, actual=GGGG"
+    },
+    {
+      "name": "adapter init succeeds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "engine is sumo",
+      "passed": true,
+      "detail": "got: sumo"
+    },
+    {
+      "name": "device_count >= 0",
+      "passed": true,
+      "detail": "count=4"
+    },
+    {
+      "name": "devices found",
+      "passed": true,
+      "detail": "count=5"
+    },
+    {
+      "name": "has traffic_light type",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "has vehicle type (after step)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "TL state readable",
+      "passed": true,
+      "detail": "props=['phase', 'phase_index', 'program_id']"
+    },
+    {
+      "name": "adapter shutdown",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "blockers": []
+}
