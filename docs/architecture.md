@@ -1,5 +1,10 @@
 # Physical AI Harness — System Architecture
 
+![Physical AI Harness Architecture](architecture.png)
+
+<details>
+<summary>View source HTML (for Markdown Viewer rendering)</summary>
+
 <div style="width: 1200px; box-sizing: border-box; position: relative; background: #0f172a; padding: 20px; border-radius: 12px;">
   <style scoped>
     .arch-wrapper { display: flex; gap: 12px; }.arch-sidebar { width: 165px; flex-shrink: 0; }.arch-main { flex: 1; min-width: 0; }.arch-title { text-align: center; font-size: 22px; font-weight: bold; color: #f1f5f9; margin-bottom: 4px; letter-spacing: 1px; }.arch-subtitle { text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 16px; }
@@ -76,3 +81,4 @@
     </div>
   </div>
 </div>
+</details>
